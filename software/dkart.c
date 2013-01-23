@@ -8,55 +8,66 @@
 #include <gb/console.h>
 #include <gb/drawing.h>
 #include <gb/font.h>
-
 #include "splash.h"
 
 #define ARROW_CHAR '>'
 #define SPACE_CHAR ' '
 
+font_t font, font_inv;
+
 // tracks current menu page
 unsigned int page = 0;
 
-// this will come from RAM, later
-unsigned int maxPage = 49;
-
-font_t font, font_inv;
+// can't read this in functions
+/*
+unsigned int mPage = 49;
+unsigned int mPos = 16;
+*/
 
 // it seems like some header should take care of this...
 void cls(void) NONBANKED;
 
 void drawMenu(){
     unsigned int i;
-    unsigned int maxPos = 15;
+    char buffer[9];
+
+    // hmm, this needs to be global & come from RAM
+    unsigned int mPage = 49;
+    unsigned int mPos = 16;
     
-    // hmm, this doesn't work
+    // hmm, this doesn't work...
     /*
-    if (page == maxPage){
-        maxPos = 5;
+    if (page == mPage){
+        mPos = 5;
     }
     */
 
     cls();
     font_set(font_inv);
     gotoxy(0, 0);
-    puts("     Choose ROM     ");
+    puts(" Choose ROM         ");
+    sprintf(buffer, "%d/%d", page + 1, mPage + 1);
+    gotoxy(19 - strlen(buffer), 0);
+    printf(buffer);
     
     font_set(font);
 
     // these will come from RAM, later
     // for now, tests short & long pages
-    for (i=1; i< maxPos; i++){
+    for (i=1; i< mPos; i++){
         gotoxy(0, i + 1); printf(" Test ROM %d                ", (page * 14) + i);
     }
 
-    font_set(font_inv);
-    gotoxy(0, 17);
-    printf("%d/%d", page + 1, maxPage + 1);
+   
 }
 
 int main() {
     // tracks current input
     unsigned int input;
+
+    // hmm, this needs to be global & come from RAM
+    unsigned int mPage = 49;
+    unsigned int mPos = 16;
 
     // tracks current menu position
     unsigned int position = 2;
@@ -66,7 +77,7 @@ int main() {
     set_bkg_tiles(0, 0, splash_width, splash_height, splash_map);
     SHOW_BKG;
     waitpad(J_START);
-
+ 
     // init fonts
     font_init();
     font = font_load(font_ibm);
@@ -91,21 +102,21 @@ int main() {
         }
 
         // up/down control position
-        if (input & J_UP && position > 2){ position -= 1; }
-        if (input & J_DOWN && position < 15){ position += 1; }
+        if (input & J_UP && position > 2) { position -= 1; }
+        if (input & J_DOWN && position < mPos) { position += 1; } // this should come from maxPos
 
         // left/right controls page
-        if ((input & J_LEFT) && page > 0){ page -= 1; }
-        if ((input & J_RIGHT) && page < maxPage){ page += 1; }
+        if ((input & J_LEFT) && page > 0) { page -= 1; }
+        if ((input & J_RIGHT) && page < mPage) { page += 1; }
 
         // draw current page
-        if (input & J_LEFT || input & J_RIGHT){ drawMenu(); }
+        if (input & J_LEFT || input & J_RIGHT) { drawMenu(); }
 
         // A/start breaks loop
-        if (input & J_A || input & J_START){ waitpadup(); break; }
+        if (input & J_A || input & J_START) { waitpadup(); break; }
 
         // on all input: wait for pad-up, display current position
-        if (input & J_LEFT || input & J_RIGHT || input & J_UP || input & J_DOWN){
+        if (input & J_LEFT || input & J_RIGHT || input & J_UP || input & J_DOWN) {
             waitpadup();
             gotoxy(0, position);
             font_set(font_inv);
