@@ -29,7 +29,7 @@ void drawMenu(){
     unsigned int i;
     unsigned int maxPos = 15;
     
-    // hmm, this doesn't work...
+    // hmm, this doesn't work
     /*
     if (page == maxPage){
         maxPos = 5;
@@ -118,7 +118,7 @@ int main() {
     font_set(font);
 
     // this will come from RAM, later
-    printf("You chose\n Test ROM %d", (page * 14) + (position-1));
+    printf("You chose\n Test ROM %d\n\n Press START", (page * 14) + (position-1));
     
     waitpad(J_START);
     reset();
