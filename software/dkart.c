@@ -87,7 +87,6 @@ int main() {
     // init screen
     drawMenu();
     gotoxy(0, position);
-    font_set(font_inv);
     putchar(ARROW_CHAR);
 
     // handle input
@@ -119,14 +118,12 @@ int main() {
         if (input & J_LEFT || input & J_RIGHT || input & J_UP || input & J_DOWN) {
             waitpadup();
             gotoxy(0, position);
-            font_set(font_inv);
             putchar(ARROW_CHAR);
         }
     }
     
     cls();
     gotoxy(1, 1);
-    font_set(font);
 
     // this will come from RAM, later
     printf("You chose\n Test ROM %d\n\n Press START", (page * 14) + (position-1));
