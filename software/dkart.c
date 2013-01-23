@@ -1,197 +1,115 @@
 /**
  * Menu file for DKart
  */
+
 #include <gb/gb.h>
 #include <stdio.h>
+#include <string.h>
 #include <gb/console.h>
 #include <gb/drawing.h>
+#include <gb/font.h>
 
-// splash screen
-#include "splash_map.c"
-#include "splash_tiles.c"
+#include "splash.h"
 
-#define ARROW_CHAR 3
+#define ARROW_CHAR '>'
 #define SPACE_CHAR ' '
 
-struct Params {
-  char *name;
-};
+unsigned int page = 0;
 
-// tracks total ROMs
-unsigned int romCount;
+// this will come form RAM, later
+unsigned int maxPage = 49;
 
-// clear screen
-void clear() {
-    int y;
-    for(y=0; y != 18; y++) {
-        gotoxy(0,y);
-        puts("                              ");
-    }
-    gotoxy(0,0);
-}
+font_t font, font_inv;
 
+// it seems like some header should take care of this...
+void cls(void) NONBANKED;
 
-
-// draw the menu from a Params array
-void menu(struct Params params[], unsigned int start){
+void drawMenu(){
     unsigned int i;
-    clear();
-    printf("Choose ROM");
+    
+    cls();
+    
+    font_set(font_inv);
+    gotoxy(0, 0);
+    puts("     Choose ROM     ");
+    
+    font_set(font);
 
-    for(i = 0; params[i + start + 1].name; i++) {
-        if (i < 15){
-            gotoxy(1, (i + 2));
-            // TODO: need to do sub-string to chop long lines
-            printf(params[i + start + 1].name);
-        }else{ // store overflow count or break?
-            if (start != 0){
-                break;
-            }else{
-                romCount=i;
-            }
-        }
+    // these will come from RAM, later
+    for (i=1; i< 15; i++){
+        gotoxy(0, i+1); printf(" Test ROM %d                ", (page * 14) + i);
     }
 
-    gotoxy(0,2);
-    setchar(ARROW_CHAR);
+    font_set(font_inv);
+    gotoxy(0, 17);
+    printf("%d/%d", page+1, maxPage+1);
 }
 
-
-// TODO: this will come from RAM, at some point
-const struct Params roms[] = {
-  { NULL },
-  { "Test 1" },
-  { "Test 2" },
-  { "Test 3" },
-  { "Test 4" },
-  { "Test 5" },
-  { "Test 6" },
-  { "Test 7" },
-  { "Test 8" },
-  { "Test 9" },
-  { "Test 10" },
-  { "Test 11" },
-  { "Test 12" },
-  { "Test 13" },
-  { "Test 14" },
-  { "Test 15" },
-  { "Test 16" },
-  { "Test 17" },
-  { "Test 18" },
-  { "Test 19" },
-  { "Test 20" },
-  { "Test 21" },
-  { "Test 22" },
-  { "Test 23" },
-  { "Test 24" },
-  { "Test 25" },
-  { "Test 26" },
-  { "Test 27" },
-  { "Test 28" },
-  { "Test 29" },
-  { "Test 30" },
-  { "Test 31" },
-  { "Test 32" },
-  { "Test 33" },
-  { "Test 34" },
-  { "Test 35" },
-  { "Test 36" },
-  { "Test 37" },
-  { "Test 38" },
-  { "Test 39" },
-  { "Test 40" },
-  { "Test 41" },
-  { "Test 42" },
-  { "Test 43" },
-  { "Test 44" },
-  { "Test 45" },
-  { "Test 46" },
-  { "Test 47" },
-  { "Test 48" },
-  { "Test 49" },
-  { "Test 50" },
-  { NULL }
-};
-
-
-void main() {
-    unsigned int input = 0;
-    unsigned int position = 0;
-    unsigned int oldposition = 0;
-    unsigned int maxPosition = 14;
-    unsigned int page = 0;
-    unsigned int oldpage = 0;
-    unsigned int maxPage = 0;
-    unsigned int selection = 0;
-
+int main() {
+    unsigned int input;
+    unsigned int position = 2;
+    
     // load splash
-    set_bkg_data(0, 191, splash_tiles);
-    VBK_REG = 1;
-    VBK_REG = 0;
-    set_bkg_tiles(0, 0, 20, 18, splash_map);
+    set_bkg_data(0, splash_count, splash_tiles);
+    set_bkg_tiles(0, 0, splash_width, splash_height, splash_map);
     SHOW_BKG;
-    DISPLAY_ON;
     waitpad(J_START);
 
-    menu(roms, 0);
-    page = 0;
-    maxPage = romCount / 14;
+    // init fonts
+    font_init();
+    font = font_load(font_ibm);
+    color(WHITE, BLACK, SOLID);
+    font_inv = font_load(font_ibm);
 
+    // init screen
+    drawMenu();
+    gotoxy(0, position);
+    font_set(font_inv);
+    putchar(ARROW_CHAR);
+
+    // handle input
     while(1){
-        input = joypad();
+        input =  joypad();
 
-        oldposition = position;
-        oldpage = page;
-
-        // A-button selects ROM
-        if (input & J_A){
-            selection = (page * 14) + position + 1;
-            break;
+        // wipe old position
+        if (input & J_UP || input & J_DOWN){
+            gotoxy(0, position);
+            font_set(font);
+            putchar(SPACE_CHAR);
         }
 
-        // up sets position & page
-        else if(input & J_UP) {
-            if (position > 0){
-                position -= 1;
-            }else{
-                if (page > 0){
-                    oldposition = 0;
-                    position = 14;
-                    page -= 1;
-                    menu(roms, page * 15);
-                }
-            }
-        }
+        // up/down control position
+        if (input & J_UP && position > 2){ position -= 1; }
+        if (input & J_DOWN && position < 15){ position += 1; }
 
-        // down sets position & page
-        else if(input & J_DOWN) {
-            if (position < maxPosition){
-                position += 1;
-            }else{
-                if (page <= maxPage ){
-                    oldposition = 14;
-                    position = 0;
-                    page += 1;
-                    menu(roms, page * 15);
-                }
-            }
-        }
+        // left/right controls page
+        if ((input & J_LEFT) && page > 0){ page -= 1; }
+        if ((input & J_RIGHT) && page < maxPage){ page += 1; }
 
-        // if position changed, update pointer & last item that can be selected
-        if (oldposition != position){
-            gotoxy(0, oldposition+2);
-            setchar(SPACE_CHAR);
-            gotoxy(0, position+2);
-            setchar(ARROW_CHAR);
+        // draw current page
+        if (input & J_LEFT || input & J_RIGHT){ drawMenu(); }
+
+        // A/start breaks loop
+        if (input & J_A || input & J_START){ waitpadup(); break; }
+
+        // on all input: wait for pad-up, display current position
+        if (input & J_LEFT || input & J_RIGHT || input & J_UP || input & J_DOWN){
+            waitpadup();
+            gotoxy(0, position);
+            font_set(font_inv);
+            putchar(ARROW_CHAR);
         }
     }
+    
+    cls();
+    gotoxy(1,1);
+    font_set(font);
 
-    // TODO: save ROM-name in RAM
-    clear();
-    printf("\n you chose:\n ");
-    printf(roms[selection].name);
-
+    // this will come from RAM, later
+    printf("You chose\n Test ROM %d", (page * 14) + (position-1));
+    
     waitpad(J_START);
-
     reset();
+
+    return 0;
 }

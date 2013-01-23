@@ -12,4 +12,10 @@ The firmware runs on the ATMEGA328 to emulate ROM/RAM reading/writing data to a 
 
 ## software
 
-A menu runs on the Gameboy to choose the current ROM/RAM.
+A menu runs on the Gameboy to choose the current ROM/RAM. I wrote it using GBDK, on a Mac.
+
+To compile, run
+
+    make
+
+in the software directory. Make sure you have GBDK, and edit Makefile to have the correct path to GBDK & RGBDS.
