@@ -28,4 +28,4 @@ in the software directory. Make sure you have [GBDK](http://gbdk.sourceforge.net
 
 I designed and wrote all the hardware/software using [GBDK](http://gbdk.sourceforge.net/) & [EagleCAD](http://www.cadsoftusa.com/)
 
-Thanks to Christopher Antonellis <christopherantonellis[at]gmail[dot]com> for good ideas, programming help, and generally being an awesome dude.
+Thanks to Christopher Antonellis for good ideas, programming help, and generally being an awesome dude.
