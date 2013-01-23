@@ -4,6 +4,8 @@ An open-hardware and software Gameboy flash-cart and hardware peripheral framewo
 
 ## hardware
 
+Hardware is licenced ![CC-BY-SA](http://i.creativecommons.org/l/by-sa/3.0/88x31.png)
+
 The hardware consists of an ATMEGA328 chip & a couple TI i2c port-expanders, and a microSD card.
 
 ## firmware
@@ -11,6 +13,8 @@ The hardware consists of an ATMEGA328 chip & a couple TI i2c port-expanders, and
 The firmware runs on the ATMEGA328 to emulate ROM/RAM reading/writing data to a microSD card formatted FAT32.
 
 ## software
+
+Software is licenced ![GPLv3](http://www.gnu.org/graphics/gplv3-88x31.png)
 
 A menu runs on the Gameboy to choose the current ROM/RAM. I wrote it using GBDK, on a Mac.
 
