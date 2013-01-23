@@ -10,6 +10,8 @@ The hardware consists of an [ATMEGA328](http://www.atmel.com/Images/8271S.pdf) c
 
 ## firmware
 
+Firmware is licensed ![GPLv3](http://www.gnu.org/graphics/gplv3-88x31.png)
+
 The firmware runs on the [ATMEGA328](http://www.atmel.com/Images/8271S.pdf) to emulate ROM/RAM reading/writing data to a microSD card formatted FAT32.
 
 ## software
