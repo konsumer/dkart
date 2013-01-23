@@ -14,9 +14,10 @@
 #define ARROW_CHAR '>'
 #define SPACE_CHAR ' '
 
+// tracks current menu page
 unsigned int page = 0;
 
-// this will come form RAM, later
+// this will come from RAM, later
 unsigned int maxPage = 49;
 
 font_t font, font_inv;
@@ -26,9 +27,16 @@ void cls(void) NONBANKED;
 
 void drawMenu(){
     unsigned int i;
+    unsigned int maxPos = 15;
     
+    // hmm, this doesn't work...
+    /*
+    if (page == maxPage){
+        maxPos = 5;
+    }
+    */
+
     cls();
-    
     font_set(font_inv);
     gotoxy(0, 0);
     puts("     Choose ROM     ");
@@ -36,17 +44,21 @@ void drawMenu(){
     font_set(font);
 
     // these will come from RAM, later
-    for (i=1; i< 15; i++){
-        gotoxy(0, i+1); printf(" Test ROM %d                ", (page * 14) + i);
+    // for now, tests short & long pages
+    for (i=1; i< maxPos; i++){
+        gotoxy(0, i + 1); printf(" Test ROM %d                ", (page * 14) + i);
     }
 
     font_set(font_inv);
     gotoxy(0, 17);
-    printf("%d/%d", page+1, maxPage+1);
+    printf("%d/%d", page + 1, maxPage + 1);
 }
 
 int main() {
+    // tracks current input
     unsigned int input;
+
+    // tracks current menu position
     unsigned int position = 2;
     
     // load splash
@@ -102,7 +114,7 @@ int main() {
     }
     
     cls();
-    gotoxy(1,1);
+    gotoxy(1, 1);
     font_set(font);
 
     // this will come from RAM, later
