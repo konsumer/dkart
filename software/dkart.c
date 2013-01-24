@@ -18,7 +18,7 @@ font_t font, font_inv;
 // tracks current menu page
 unsigned int page = 0;
 
-// can't read this in functions
+// hmm, can't read this in functions, needs to be shared
 /*
 unsigned int mPage = 49;
 unsigned int mPos = 16;
@@ -102,7 +102,7 @@ int main() {
 
         // up/down control position
         if (input & J_UP && position > 2) { position -= 1; }
-        if (input & J_DOWN && position < mPos) { position += 1; } // this should come from maxPos
+        if (input & J_DOWN && position < mPos) { position += 1; }
 
         // left/right controls page
         if ((input & J_LEFT) && page > 0) { page -= 1; }
