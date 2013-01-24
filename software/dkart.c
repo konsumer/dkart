@@ -6,14 +6,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <gb/console.h>
-#include <gb/drawing.h>
-#include <gb/font.h>
+
 #include "splash.h"
 
-#define ARROW_CHAR '>'
-#define SPACE_CHAR ' '
-
-font_t font, font_inv;
+#define CHAR_ARROW_RIGHT 3
+#define CHAR_SPACE ' '
 
 // tracks current menu page
 unsigned int page = 0;
@@ -43,14 +40,11 @@ void drawMenu(){
     */
 
     cls();
-    font_set(font_inv);
     gotoxy(0, 0);
     puts(" Choose ROM         ");
     sprintf(buffer, "%d/%d", page + 1, mPage + 1);
     gotoxy(19 - strlen(buffer), 0);
     printf(buffer);
-    
-    font_set(font);
 
     // these will come from RAM, later
     // for now, tests short & long pages
@@ -77,17 +71,11 @@ int main() {
     set_bkg_tiles(0, 0, splash_width, splash_height, splash_map);
     SHOW_BKG;
     waitpad(J_START);
- 
-    // init fonts
-    font_init();
-    font = font_load(font_ibm);
-    color(WHITE, BLACK, SOLID);
-    font_inv = font_load(font_ibm);
 
     // init screen
     drawMenu();
     gotoxy(0, position);
-    putchar(ARROW_CHAR);
+    putchar(CHAR_ARROW_RIGHT);
 
     // handle input
     while(1){
@@ -96,8 +84,7 @@ int main() {
         // wipe old position
         if (input & J_UP || input & J_DOWN){
             gotoxy(0, position);
-            font_set(font);
-            putchar(SPACE_CHAR);
+            putchar(CHAR_SPACE);
         }
 
         // up/down control position
@@ -118,7 +105,7 @@ int main() {
         if (input & J_LEFT || input & J_RIGHT || input & J_UP || input & J_DOWN) {
             waitpadup();
             gotoxy(0, position);
-            putchar(ARROW_CHAR);
+            putchar(CHAR_ARROW_RIGHT);
         }
     }
     
