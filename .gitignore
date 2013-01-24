@@ -23,6 +23,6 @@
 
 # project files
 *.sublime-*
-*.*##
+*.*#*
 *.pro
 *.epf
