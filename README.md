@@ -6,9 +6,9 @@ An open-hardware and software Gameboy flash-cart and hardware peripheral framewo
 
 Hardware is licensed ![CC-BY-SA](http://i.creativecommons.org/l/by-sa/3.0/88x31.png)
 
-Originally I had hoped to use a [ATMEGA328](http://www.atmel.com/Images/8271S.pdf) chip & a couple TI i2c port-expanders, and a microSD card.
+Originally, I had hoped to use a [ATMEGA328](http://www.atmel.com/Images/8271S.pdf) chip & a couple TI i2c port-expanders, and a microSD card.
 
-This would have been too slow.  Now, I am expoloring [XMEGA](http://www.atmel.com/products/microcontrollers/avr/avr_xmega.aspx).
+This would have been too slow.  Now, I am exploring [XMEGA](http://www.atmel.com/products/microcontrollers/avr/avr_xmega.aspx).
 
 DMA should help with transferring bits form GB, but I may also need some RAM to cache current ROM/RAM.
 
