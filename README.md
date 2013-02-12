@@ -7,6 +7,7 @@ An open-hardware and software Gameboy flash-cart and hardware peripheral framewo
 
 The hardware is based on the [AT90USB1287](http://www.atmel.com/devices/at90usb1287.aspx) which is the same chip used on the [Teensy++ 2.0](http://www.pjrc.com/teensy/.) 16 I/O pins are put into a header, for expansion use, and the gameboy sound-pin is also pulled out.
 
+The parts-list for easy ordering can be found on [GoogleDocs](https://docs.google.com/spreadsheet/ccc?key=0AmR-TSEGjnLgdHRjdEI4cExjeG5Cb1RpVC1oOUI1LXc&usp=sharing)
 
 ## Firmware
 
