@@ -2,15 +2,15 @@
 
 An open-hardware and software Gameboy flash-cart and hardware peripheral framework
 
-## hardware
+## Hardware
 
 The hardware is based on the [AT90USB1287](http://www.atmel.com/devices/at90usb1287.aspx) which is the same chip used on the [Teensy++ 2.0](http://www.pjrc.com/teensy/.) 16 I/O pins are put into a header, for expansion use, and the gameboy sound-pin is also pulled out.
 
-## firmware
+## Firmware
 
 The firmware runs on the [AT90USB1287](http://www.atmel.com/Images/8271S.pdf) to emulate ROM/RAM reading/writing data to a microSD card formatted FAT32. It can be edited in reg Arduino IDE.
 
-## software
+## Software
 
 A menu runs on the Gameboy to choose the current ROM/RAM.
 
