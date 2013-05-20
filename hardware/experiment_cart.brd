@@ -98,6 +98,38 @@
 <wire x1="51.74" y1="0" x2="51.74" y2="31.74" width="0" layer="20"/>
 <wire x1="51.74" y1="31.74" x2="0" y2="31.74" width="0" layer="20"/>
 <wire x1="0" y1="31.74" x2="0" y2="0" width="0" layer="20"/>
+<text x="6.35" y="20.32" size="0.6096" layer="25">A0</text>
+<text x="8.89" y="20.32" size="0.6096" layer="25">A1</text>
+<text x="11.43" y="20.32" size="0.6096" layer="25">A2</text>
+<text x="13.97" y="20.32" size="0.6096" layer="25">A3</text>
+<text x="16.51" y="20.32" size="0.6096" layer="25">A4</text>
+<text x="19.05" y="20.32" size="0.6096" layer="25">A5</text>
+<text x="21.59" y="20.32" size="0.6096" layer="25">A6</text>
+<text x="24.13" y="20.32" size="0.6096" layer="25">A7</text>
+<text x="26.67" y="20.32" size="0.6096" layer="25">A8</text>
+<text x="29.21" y="20.32" size="0.6096" layer="25">A9</text>
+<text x="31.75" y="20.32" size="0.6096" layer="25">A10</text>
+<text x="34.29" y="20.32" size="0.6096" layer="25">A11</text>
+<text x="36.83" y="20.32" size="0.6096" layer="25">A12</text>
+<text x="39.37" y="20.32" size="0.6096" layer="25">A13</text>
+<text x="41.91" y="20.32" size="0.6096" layer="25">A14</text>
+<text x="44.45" y="20.32" size="0.6096" layer="25">A15</text>
+<text x="6.35" y="25.4" size="0.6096" layer="25">GND</text>
+<text x="8.89" y="25.4" size="0.6096" layer="25">VCC</text>
+<text x="11.43" y="25.4" size="0.6096" layer="25">CLK</text>
+<text x="13.97" y="25.4" size="0.6096" layer="25">WR</text>
+<text x="16.51" y="25.4" size="0.6096" layer="25">RD</text>
+<text x="19.05" y="25.4" size="0.6096" layer="25">CS</text>
+<text x="21.59" y="25.4" size="0.6096" layer="25">RST</text>
+<text x="24.13" y="25.4" size="0.6096" layer="25">SND</text>
+<text x="26.67" y="25.4" size="0.6096" layer="25">D0</text>
+<text x="29.21" y="25.4" size="0.6096" layer="25">D1</text>
+<text x="31.75" y="25.4" size="0.6096" layer="25">D2</text>
+<text x="34.29" y="25.4" size="0.6096" layer="25">D3</text>
+<text x="36.83" y="25.4" size="0.6096" layer="25">D4</text>
+<text x="39.37" y="25.4" size="0.6096" layer="25">D5</text>
+<text x="41.91" y="25.4" size="0.6096" layer="25">D6</text>
+<text x="44.45" y="25.4" size="0.6096" layer="25">D7</text>
 </plain>
 <libraries>
 <library name="microbuilder">
@@ -552,7 +584,9 @@ Please make sure your boards conform to these design rules.</description>
 </autorouter>
 <elements>
 <element name="U$2" library="gameboy-nohole" package="GBA_CART" value="" x="25.4" y="3.81"/>
-<element name="JP2" library="microbuilder" package="2X16" value="" x="25.4" y="22.86"/>
+<element name="JP2" library="microbuilder" package="2X16" value="" x="25.4" y="22.86" smashed="yes">
+<attribute name="VALUE" x="5.08" y="18.415" size="0.4064" layer="27" ratio="10"/>
+</element>
 </elements>
 <signals>
 <signal name="GND">
