@@ -26,3 +26,5 @@
 *.*#*
 *.pro
 *.epf
+
+.DS_Store
