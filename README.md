@@ -11,7 +11,7 @@ The parts-list for easy ordering can be found on [GoogleDocs](https://docs.googl
 
 ## Firmware
 
-The firmware runs on the [AT90USB1287](http://www.atmel.com/Images/8271S.pdf) to emulate ROM/RAM reading/writing data to a microSD card formatted FAT32. It can be edited in Arduino IDE.
+The firmware runs on the [AT90USB1287](http://www.atmel.com/devices/at90usb1287.aspx) to emulate ROM/RAM reading/writing data to a microSD card formatted FAT32. It can be edited in Arduino IDE.
 
 
 ## Software
