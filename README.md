@@ -9,6 +9,8 @@ An open-hardware and software Gameboy flash-cart and hardware peripheral framewo
 
 It's meant to be very cheap & easy to put together. I made a PCB, and you can just solder in a [STM32F401](https://www.banggood.com/STM32F401-Development-Board-STM32F401CCU6-STM32F4-Learning-Board-p-1568897.html) and the SDCard shield, and it should work.
 
+Originally, I designed this as a custom circuit with really low-resource chips, but realized it was much easier and cheaper to just use ready-made stuff.
+
 ### Parts list
 
 * [STM32F401](https://www.banggood.com/STM32F401-Development-Board-STM32F401CCU6-STM32F4-Learning-Board-p-1568897.html)
