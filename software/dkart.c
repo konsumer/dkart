@@ -46,7 +46,7 @@ void drawMenu(){
     gotoxy(19 - strlen(buffer), 0);
     printf(buffer);
 
-    // these will come from RAM, later
+    // TODO: get list from cart (emulate RAM)
     // for now, tests short & long pages
     for (i=1; i< mPos; i++){
         gotoxy(0, i + 1); printf(" Test ROM %d                ", (page * 14) + i);
@@ -114,6 +114,8 @@ int main() {
 
     // this will come from RAM, later
     printf("You chose\n Test ROM %d\n\n Press START", (page * 14) + (position-1));
+
+    // TODO: write ROM-choice to specific location
     
     waitpad(J_START);
     reset();
