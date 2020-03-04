@@ -1,7 +1,9 @@
 
-GBDK = /opt/gbdk
-RGBFIX = /opt/rgbds/rgbfix
-CC	= ${GBDK}/bin/lcc -Wa-l -Wl-m -Wl-j
+LOC_GBDK = /opt/gbdk
+LOC_RGBDS=/opt/rgbds
+
+RGBFIX = ${LOC_RGBDS}/rgbfix
+CC	= ${LOC_GBDK}/bin/lcc -Wa-l -Wl-m -Wl-j
 
 BINS	= dkart.gb
 

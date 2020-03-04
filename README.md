@@ -36,8 +36,50 @@ To compile, run
 make
 ```
 
-in the software directory. Make sure you have [GBDK](http://gbdk.sourceforge.net/), and edit Makefile to have the correct path to [GBDK](http://gbdk.sourceforge.net/) & [RGBDS](https://github.com/vegard/rgbds-linux).
+in the software directory. 
 
+
+### dependencies
+
+Make sure you have [GBDK](https://github.com/gheja/gbdk), and edit Makefile to have the correct path to [GBDK](http://gbdk.sourceforge.net/) & [RGBDS](https://github.com/rednex/rgbds).
+
+#### Arch Linux
+
+```sh
+yaourt -S rgbds gbdk
+```
+
+#### Ubuntu Linux
+First you'll need these:
+
+```sh
+sudo apt-get -y install make gcc g++ bison flex
+```
+
+Now, run "Make" steps, below.
+
+#### Other OS's
+
+I'm sure you can install them on other OS's, but I didn't have time to test. If you figure it out, send a PR!
+
+
+#### Make
+
+```sh
+wget https://github.com/gheja/gbdk/archive/master.zip -O gbdk.zip
+unzip gbdk.zip
+cd gbdk-master
+make
+sudo make install
+
+cd ..
+
+wget https://github.com/rednex/rgbds/archive/master.zip -O rgbds.zip
+unzip rgbds.zip
+cd rgbds-master
+make
+sudo make install
+```
 
 ## TODO
 
