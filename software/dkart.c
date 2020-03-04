@@ -115,7 +115,7 @@ int main() {
     // this will come from RAM, later
     printf("You chose\n Test ROM %d\n\n Press START", (page * 14) + (position-1));
 
-    // TODO: write ROM-choice to specific location
+    // TODO: write ROM-choice to specific memory location
     
     waitpad(J_START);
     reset();

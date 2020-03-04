@@ -5,7 +5,7 @@ LOC_RGBDS=/opt/rgbds
 RGBFIX = ${LOC_RGBDS}/rgbfix
 CC	= ${LOC_GBDK}/bin/lcc -Wa-l -Wl-m -Wl-j
 
-BINS	= dkart.gb
+BINS	= dkart.gbc
 
 all:	$(BINS)
 
@@ -23,9 +23,6 @@ all:	$(BINS)
 
 dkart.gbc:	dkart.o
 	$(CC) -Wl-yt2 -Wl-yo4 -Wl-ya4 -o $@ $< && ${RGBFIX} -vcs -l 0x33 -p 0 -t "DKart" $@
-
-%.gbc:	%.o
-	$(CC) -o $@ $< && ${RGBFIX} -vcs -l 0x33 -p 0 $@
 
 clean:
 	rm -f *.o *.lst *.map *.gb *.gbc *~ *.rel *.cdb *.ihx *.lnk *.sym *.asm

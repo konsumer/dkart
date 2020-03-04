@@ -4,12 +4,18 @@ An open-hardware and software Gameboy flash-cart and hardware peripheral framewo
 
 ![logo](./logo.png)
 
+## quickstart
+
+If you just want to get started, go to [releases](https://github.com/konsumer/dkart/releases) and grab `dkart.gbc`, and put it on a FAT32-formatted SDCard. Solder together the hardware, plug it in, and startup your gameboy.
+
 
 ## Hardware
 
 It's meant to be very cheap & easy to put together. I made a PCB, and you can just solder in a [STM32F401](https://www.banggood.com/STM32F401-Development-Board-STM32F401CCU6-STM32F4-Learning-Board-p-1568897.html) and the SDCard shield, and it should work.
 
 Originally, I designed this as a custom circuit with really low-resource chips, but realized it was much easier and cheaper to just use more modern ready-made stuff.
+
+Eventually I'd like to add an i2c bus that can be triggered/read from gameboy, so users can easily mess with hardware peripherals.
 
 ### Parts list
 
@@ -84,8 +90,8 @@ sudo make install
 ## TODO
 
 * Actually Implement MBC1
-* Get menu working (on menu selection, set mem, load on reboot)
 * Get SD-loading working (on boot load into RAM from SD while playing logo)
+* Get menu working (get list of ROMs from firmware, on menu selection, set mem, load on reboot & clear mem)
 * Implement MBC5
 * Replace Nintendo logo with mine
 * add extra IO-functionality, reading/writing to a specific memory location to turn on "I/O mode" and be able to interface with other peripherals
