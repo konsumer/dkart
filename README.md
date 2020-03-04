@@ -1,6 +1,6 @@
 # dkart
 
-An open-hardware and software Gameboy flash-cart and hardware peripheral framework that uses Arduino. The goal is to be ultra-cheap and simple.
+An open-hardware and software Gameboy flash-cart and hardware peripheral framework that uses off-the-shelf hardware. The goal is to be ultra-cheap and simple.
 
 ![logo](./logo.png)
 
