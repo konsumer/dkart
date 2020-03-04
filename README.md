@@ -58,9 +58,9 @@ sudo apt-get -y install make gcc g++ bison flex
 
 Now, run "Make" steps, below.
 
-#### Other OS's
+#### Other OS
 
-I'm sure you can install them on other OS's, but I didn't have time to test. If you figure it out, send a PR!
+I'm sure you can install them on MacOS, Windows, etc, but I didn't have time to test. If you figure it out, send a PR!
 
 
 #### Make
