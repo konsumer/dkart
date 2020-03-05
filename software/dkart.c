@@ -1,7 +1,3 @@
-/**
- * Menu file for DKart
- */
-
 #include <gb/gb.h>
 #include <stdio.h>
 #include <string.h>
@@ -12,113 +8,137 @@
 #define CHAR_ARROW_RIGHT 3
 #define CHAR_SPACE ' '
 
-// tracks current menu page
+unsigned int input;
 unsigned int page = 0;
+unsigned int maxPos = 15;
+unsigned int position = 0;
 
-// hmm, can't read this in functions, needs to be shared
-/*
-unsigned int mPage = 49;
-unsigned int mPos = 16;
-*/
+// these will come from cart, later
+unsigned int maxPage = 999;
+char menuPage[15][20] = {
+  'Test ROM 1',
+  'Test ROM 2',
+  'Test ROM 3',
+  'Test ROM 4',
+  'Test ROM 5',
+  'Test ROM 6',
+  'Test ROM 7',
+  'Test ROM 8',
+  'Test ROM 9',
+  'Test ROM 10',
+  'Test ROM 11',
+  'Test ROM 12',
+  'Test ROM 13',
+  'Test ROM 14',
+  'Test ROM 15'
+};
 
-// it seems like some header should take care of this...
+// clear the screen
 void cls(void) NONBANKED;
 
-void drawMenu(){
-    unsigned int i;
-    char buffer[9];
-
-    // hmm, this needs to be global & come from RAM
-    unsigned int mPage = 49;
-    unsigned int mPos = 16;
-    
-    // hmm, this doesn't work...
-    /*
-    if (page == mPage){
-        mPos = 5;
-    }
-    */
-
-    cls();
-    gotoxy(0, 0);
-    puts(" Choose ROM         ");
-    sprintf(buffer, "%d/%d", page + 1, mPage + 1);
-    gotoxy(19 - strlen(buffer), 0);
-    printf(buffer);
-
-    // TODO: get list from cart (emulate RAM)
-    // for now, tests short & long pages
-    for (i=1; i< mPos; i++){
-        gotoxy(0, i + 1); printf(" Test ROM %d                ", (page * 14) + i);
-    }
-
-   
+// show splash-screen
+void splash () {
+  cls();
+  set_bkg_data(0, splash_count, splash_tiles);
+  set_bkg_tiles(0, 0, splash_width, splash_height, splash_map);
+  SHOW_BKG;
+  waitpad(J_START | J_SELECT | J_B | J_A);
 }
 
-int main() {
-    // tracks current input
-    unsigned int input;
+// draw the menu
+void showPage () {
+  unsigned int pad = 7;
+  unsigned int i;
 
-    // hmm, this needs to be global & come from RAM
-    unsigned int mPage = 49;
-    unsigned int mPos = 16;
+  cls();
 
-    // tracks current menu position
-    unsigned int position = 2;
-    
-    // load splash
-    set_bkg_data(0, splash_count, splash_tiles);
-    set_bkg_tiles(0, 0, splash_width, splash_height, splash_map);
-    SHOW_BKG;
-    waitpad(J_START);
+  if (maxPage >= 999) { pad -= 1; }
+  if (page >= 99){ pad -= 1; }
+  gotoxy(0, 0);
+  puts("--------------------");
+  gotoxy(pad, 0);
+  printf(" %d/%d\n", page + 1, maxPage + 1);
+  for (i=0;i<maxPos;i++){
+    gotoxy(0, i + 1);
+    printf(" %s\n", menuPage[i]);
+  }
+}
 
-    // init screen
-    drawMenu();
-    gotoxy(0, position);
-    putchar(CHAR_ARROW_RIGHT);
+// make a "pew" sound
+void soundChoose(){
+  NR52_REG = 0x80;
+  NR51_REG = 0x11;
+  NR50_REG = 0x77;
+  
+  NR10_REG = 0x15;
+  NR11_REG = 0x96;
+  NR12_REG = 0x73;
+  NR13_REG = 0xBB;
+  NR14_REG = 0x85;
+}
 
-    // handle input
-    while(1){
-        input =  joypad();
+// make a move-sound
+void soundMove(){
+  NR52_REG = 0x80;
+  NR51_REG = 0x11;
+  NR50_REG = 0x77;
+  
+  NR10_REG = 0x79;
+  NR11_REG = 0x8D;
+  NR12_REG = 0x63;
+  NR13_REG = 0xC8;
+  NR14_REG = 0x80;
+}
 
-        // wipe old position
-        if (input & J_UP || input & J_DOWN){
-            gotoxy(0, position);
-            putchar(CHAR_SPACE);
-        }
+// draw the menu, wait for a choice
+void menu () {
+  showPage();
+  gotoxy(0, 1);
+  putchar(CHAR_ARROW_RIGHT);
+  while(1){
+    input =  joypad();
 
-        // up/down control position
-        if (input & J_UP && position > 2) { position -= 1; }
-        if (input & J_DOWN && position < mPos) { position += 1; }
-
-        // left/right controls page
-        if ((input & J_LEFT) && page > 0) { page -= 1; }
-        if ((input & J_RIGHT) && page < mPage) { page += 1; }
-
-        // draw current page
-        if (input & J_LEFT || input & J_RIGHT) { drawMenu(); }
-
-        // A/start breaks loop
-        if (input & J_A || input & J_START) { waitpadup(); break; }
-
-        // on all input: wait for pad-up, display current position
-        if (input & J_LEFT || input & J_RIGHT || input & J_UP || input & J_DOWN) {
-            waitpadup();
-            gotoxy(0, position);
-            putchar(CHAR_ARROW_RIGHT);
-        }
+    if (input & J_LEFT || input & J_RIGHT || input & J_UP || input & J_DOWN){
+      gotoxy(0, position+1);
+      putchar(CHAR_SPACE);
     }
-    
-    cls();
-    gotoxy(1, 1);
 
-    // this will come from RAM, later
-    printf("You chose\n Test ROM %d\n\n Press START", (page * 14) + (position-1));
+    // up/down control position
+    if (input & J_UP && position > 0) { position -= 1; }
+    if (input & J_DOWN && position <= maxPos) { position += 1; }
 
-    // TODO: write ROM-choice to specific memory location
-    
-    waitpad(J_START);
-    reset();
+    // left/right controls page
+    if ((input & J_LEFT) && page > 0) { page -= 1; }
+    if ((input & J_RIGHT) && page <= maxPage) { page += 1; }
 
-    return 0;
+    if (input & J_LEFT || input & J_RIGHT){
+      showPage();
+    }
+
+    if (input & J_LEFT || input & J_RIGHT || input & J_UP || input & J_DOWN){
+      gotoxy(0, position + 1);
+      putchar(CHAR_ARROW_RIGHT);
+      soundMove();
+      waitpadup();
+    }
+
+    // A/start breaks loop
+    if (input & J_A || input & J_START) {
+      soundChoose();
+      waitpadup();
+      break;
+    }
+  }
+  cls();
+}
+
+int main () {
+  splash();
+  soundChoose();
+  menu();
+  printf("You chose %d", position + (page * maxPos));
+  waitpadup();
+  // TODO: tell cart selection, wait for loaded from SD
+  reset();
+  return 0;
 }
