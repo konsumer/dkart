@@ -8,30 +8,38 @@
 #define CHAR_ARROW_RIGHT 3
 #define CHAR_SPACE ' '
 
-unsigned int input;
-unsigned int page = 0;
-unsigned int maxPos = 15;
+// tracks current selected rom/page
 unsigned int position = 0;
+unsigned int page = 0;
 
-// these will come from cart, later
-unsigned int maxPage = 999;
-char menuPage[15][20] = {
-  'Test ROM 1',
-  'Test ROM 2',
-  'Test ROM 3',
-  'Test ROM 4',
-  'Test ROM 5',
-  'Test ROM 6',
-  'Test ROM 7',
-  'Test ROM 8',
-  'Test ROM 9',
-  'Test ROM 10',
-  'Test ROM 11',
-  'Test ROM 12',
-  'Test ROM 13',
-  'Test ROM 14',
-  'Test ROM 15'
+// total number of roms
+// TODO: this will come from cart 
+unsigned int romCount = 1000;
+
+// current page of rom titles
+// TODO: this will come from cart
+char menuPage[17][21] = {
+  "Test ROM 1",
+  "Test ROM 2",
+  "Test ROM 3",
+  "Test ROM 4",
+  "Test ROM 5",
+  "Test ROM 6",
+  "Test ROM 7",
+  "Test ROM 8",
+  "Test ROM 9",
+  "Test ROM 10",
+  "Test ROM 11",
+  "Test ROM 12",
+  "Test ROM 13",
+  "Test ROM 14",
+  "Test ROM 15",
+  "Test ROM 16",
+  "Test ROM 17"
 };
+
+unsigned int maxPos = 15;
+unsigned int maxPage = (romCount/maxPos) + 1;
 
 // clear the screen
 void cls(void) NONBANKED;
@@ -57,10 +65,12 @@ void showPage () {
   gotoxy(0, 0);
   puts("--------------------");
   gotoxy(pad, 0);
-  printf(" %d/%d\n", page + 1, maxPage + 1);
-  for (i=0;i<maxPos;i++){
-    gotoxy(0, i + 1);
-    printf(" %s\n", menuPage[i]);
+  printf(" %d/%d\n", page + 1, maxPage);
+
+  // this corrupt for some reason  
+  for (i=0; i<16; i++){
+    gotoxy(0, i+1);
+    printf(" %s", menuPage[i]);
   }
 }
 
@@ -92,9 +102,12 @@ void soundMove(){
 
 // draw the menu, wait for a choice
 void menu () {
+  unsigned int input;
+
   showPage();
   gotoxy(0, 1);
   putchar(CHAR_ARROW_RIGHT);
+
   while(1){
     input =  joypad();
 
@@ -105,11 +118,11 @@ void menu () {
 
     // up/down control position
     if (input & J_UP && position > 0) { position -= 1; }
-    if (input & J_DOWN && position <= maxPos) { position += 1; }
+    if (input & J_DOWN && position < maxPos) { position += 1; }
 
     // left/right controls page
     if ((input & J_LEFT) && page > 0) { page -= 1; }
-    if ((input & J_RIGHT) && page <= maxPage) { page += 1; }
+    if ((input & J_RIGHT) && page < maxPage) { page += 1; }
 
     if (input & J_LEFT || input & J_RIGHT){
       showPage();
@@ -136,9 +149,10 @@ int main () {
   splash();
   soundChoose();
   menu();
-  printf("You chose %d", position + (page * maxPos));
-  waitpadup();
-  // TODO: tell cart selection, wait for loaded from SD
+  gotoxy(0, 0);
+  printf("You chose:\n%d", position);
+  waitpad(J_START | J_SELECT | J_B | J_A);
+  // TODO: tell cart selection, wait for "load complete" message from cart
   reset();
   return 0;
 }
