@@ -14,29 +14,11 @@ unsigned int page = 0;
 
 // total number of roms
 // TODO: this will come from cart 
-unsigned int romCount = 1000;
+unsigned int romCount;
 
 // current page of rom titles
 // TODO: this will come from cart
-char menuPage[17][21] = {
-  "Test ROM 1",
-  "Test ROM 2",
-  "Test ROM 3",
-  "Test ROM 4",
-  "Test ROM 5",
-  "Test ROM 6",
-  "Test ROM 7",
-  "Test ROM 8",
-  "Test ROM 9",
-  "Test ROM 10",
-  "Test ROM 11",
-  "Test ROM 12",
-  "Test ROM 13",
-  "Test ROM 14",
-  "Test ROM 15",
-  "Test ROM 16",
-  "Test ROM 17"
-};
+char menuPage[17][21];
 
 unsigned int maxPos = 15;
 unsigned int maxPage = (romCount/maxPos) + 1;
@@ -57,6 +39,14 @@ void splash () {
 void showPage () {
   unsigned int pad = 7;
   unsigned int i;
+  char buffer[21];
+
+  // normally this would come from cart
+  romCount = 1000;
+  for (i=0; i<17; i++) {
+    sprintf(buffer, "Test ROM %d", i+1);
+    memcpy(menuPage[i], buffer , 21);
+  }
 
   cls();
 
