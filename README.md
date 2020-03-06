@@ -17,12 +17,21 @@ Originally, I designed this as a custom circuit with really low-resource chips, 
 
 Eventually I'd like to add an i2c bus that can be triggered/read from gameboy, so users can easily mess with hardware peripherals.
 
-### Parts list
-
-* [STM32F401](https://www.banggood.com/STM32F401-Development-Board-STM32F401CCU6-STM32F4-Learning-Board-p-1568897.html)
-* An [SDCard shield](https://www.banggood.com/SD-Card-Module-Slot-Socket-Reader-Mp3-player-p-74105.html?rmmds=search&cur_warehouse=CN)
-
 I am still working on the PCB & schematic. You can open hardware/Dkart.json at [easyeda](https://easyeda.com/).
+
+### under consideration
+
+Here are some other ideas I am looking at:
+
+* [cheap ESP32 board](https://www.banggood.com/Geekcreit-ESP32-WiFibluetooth-Development-Board-Ultra-Low-Power-Consumption-Dual-Cores-Unsoldered-p-1214159.html?rmmds=search&cur_warehouse=CN) - works with arduino, has wifi & bluetooth. not enough RAM/ROM, but could be combined with flash mem. [This board](https://www.banggood.com/LILYGO-TTGO-T2-ESP32-0_95-OLED-SD-Card-WiFi-bluetooth-Module-Development-Board-p-1270477.html?rmmds=search&cur_warehouse=CN) has a SDCard and OLED screen (and wifi/bluetooth)
+* [cheap atmega2560 board](https://robotdyn.com/mega-2560-pro-mini-atmega2560-16au.html), works with arduino & has more IO/RAM/CPU, but still not big enough to hold every ROM
+* [fast flash mem](https://www.sparkfun.com/products/15809) - I could load the rom & ram into flash temporarily on a lower-end microcontroller, then feed the data to the GB.
+* [something like this](https://www.banggood.com/GY-Openlog-Cleanflight-Naze32-F3-Blackbox-Flash-Recorder-Module-p-1309673.html?rmmds=search&cur_warehouse=CN) has a lot of storage (32GB) but might not be fast enough
+* [ready-made cart PCB](https://store.kitsch-bent.com/product/kk_gb_brkout) - with a little simple soldering and a big flash chip, I could probly get it all to fit inside a cartridge
+* [something like this](http://ww1.microchip.com/downloads/en/DeviceDoc/20005023B.pdf) could be hooked up directly to GB pins, with maybe a little simple mode-management from a micro
+* [sdfat](https://github.com/greiman/SdFat-beta) can do 3965.11 KB/Sec transfer in dedicated SPI with a slow cad, which should be fast enough
+* [better SDCards](https://www.cameramemoryspeed.com/sd-memory-card-faq/fastest-memory-card/) can go much faster, so make sure to check SD speed (maybe even make a lil arduino sketch for measuring that)
+
 
 
 ## Firmware
