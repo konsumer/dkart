@@ -8,20 +8,12 @@
 #define CHAR_ARROW_RIGHT 3
 #define CHAR_SPACE ' '
 
-// tracks current selected rom/page
-unsigned int position = 0;
-unsigned int page = 0;
-
-// total number of roms
-// TODO: this will come from cart 
+unsigned int position;
+unsigned int page;
 unsigned int romCount;
-
-// current page of rom titles
-// TODO: this will come from cart
 char menuPage[17][21];
-
 unsigned int maxPos = 15;
-unsigned int maxPage = (romCount/maxPos) + 1;
+unsigned int maxPage;
 
 // clear the screen
 void cls(void) NONBANKED;
@@ -43,7 +35,9 @@ void showPage () {
 
   // normally this would come from cart
   romCount = 1000;
-  for (i=0; i<17; i++) {
+  maxPage = (romCount/maxPos) + 1;
+
+  for (i=0; i!=16; i++) {
     sprintf(buffer, "Test ROM %d", i+1);
     memcpy(menuPage[i], buffer , 21);
   }
@@ -58,7 +52,7 @@ void showPage () {
   printf(" %d/%d\n", page + 1, maxPage);
 
   // this corrupt for some reason  
-  for (i=0; i<16; i++){
+  for (i=0; i!=16; i++){
     gotoxy(0, i+1);
     printf(" %s", menuPage[i]);
   }
@@ -93,6 +87,8 @@ void soundMove(){
 // draw the menu, wait for a choice
 void menu () {
   unsigned int input;
+  position = 0;
+  page = 0;
 
   showPage();
   gotoxy(0, 1);
@@ -107,12 +103,12 @@ void menu () {
     }
 
     // up/down control position
-    if (input & J_UP && position > 0) { position -= 1; }
-    if (input & J_DOWN && position < maxPos) { position += 1; }
+    if (input & J_UP && position != 0) { position -= 1; }
+    if (input & J_DOWN && position != maxPos) { position += 1; }
 
     // left/right controls page
-    if ((input & J_LEFT) && page > 0) { page -= 1; }
-    if ((input & J_RIGHT) && page < maxPage) { page += 1; }
+    if ((input & J_LEFT) && page != 0) { page -= 1; }
+    if ((input & J_RIGHT) && page != maxPage) { page += 1; }
 
     if (input & J_LEFT || input & J_RIGHT){
       showPage();
