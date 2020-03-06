@@ -31,7 +31,7 @@ Here are some other ideas I am looking at:
 * [something like this](http://ww1.microchip.com/downloads/en/DeviceDoc/20005023B.pdf) could be hooked up directly to GB pins, with maybe a little simple mode-management from a micro
 * [sdfat](https://github.com/greiman/SdFat-beta) can do 3965.11 KB/Sec transfer in dedicated SPI with a slow cad, which should be fast enough
 * [better SDCards](https://www.cameramemoryspeed.com/sd-memory-card-faq/fastest-memory-card/) can go much faster, so make sure to check SD speed (maybe even make a lil arduino sketch for measuring that)
-
+* 3d print longer cart to hold more electronics if needed. [here](https://www.thingiverse.com/thing:2882206) are some nice variations. [Here](https://www.thingiverse.com/thing:3101147) is a nice modular design (opnscad - chnage logo, etc)
 
 
 ## Firmware
