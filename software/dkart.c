@@ -37,11 +37,6 @@ void showPage () {
   romCount = 1000;
   maxPage = (romCount/maxPos) + 1;
 
-  for (i=0; i!=16; i++) {
-    sprintf(buffer, "Test ROM %d", i+1);
-    memcpy(menuPage[i], buffer , 21);
-  }
-
   cls();
 
   if (maxPage >= 999) { pad -= 1; }
@@ -50,9 +45,11 @@ void showPage () {
   puts("--------------------");
   gotoxy(pad, 0);
   printf(" %d/%d\n", page + 1, maxPage);
-
-  // this corrupt for some reason  
+ 
   for (i=0; i!=16; i++){
+    // normally this would come from cart
+    sprintf(buffer, "Test ROM %d", i+1);
+    memcpy(menuPage[i], buffer , 21);
     gotoxy(0, i+1);
     printf(" %s", menuPage[i]);
   }
