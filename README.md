@@ -6,7 +6,7 @@ An open-hardware and software Gameboy flash-cart and hardware peripheral framewo
 
 ## quickstart
 
-If you just want to get started, go to [releases](https://github.com/konsumer/dkart/releases) and grab `dkart.gbc`, and put it on a FAT32-formatted SDCard. Solder together the hardware, plug it in, and startup your gameboy.
+If you just want to get started, go to [releases](https://github.com/konsumer/dkart/releases) and grab `dkart.gb`, and put it on a FAT32-formatted SDCard. Solder together the hardware, plug it in, and startup your gameboy.
 
 
 ## Hardware
