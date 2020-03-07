@@ -8,12 +8,17 @@
 #define CHAR_ARROW_RIGHT 3
 #define CHAR_SPACE ' '
 
-unsigned int position;
-unsigned int page;
-unsigned int romCount;
-char menuPage[17][21];
 unsigned int maxPos = 15;
-unsigned int maxPage;
+
+// these are known-addresses that can comm with cart
+int *position = (int *) 0xA000;
+int *page = (int *) 0xA001;
+int *romCount = (int *) 0xA002;
+
+// TODO
+char menuPage[17][21];
+
+unsigned int maxPage = (romCount[0]/maxPos) + 1;
 
 // clear the screen
 void cls(void) NONBANKED;
@@ -33,18 +38,14 @@ void showPage () {
   unsigned int i;
   char buffer[21];
 
-  // normally this would come from cart
-  romCount = 1000;
-  maxPage = (romCount/maxPos) + 1;
-
   cls();
 
   if (maxPage >= 999) { pad -= 1; }
-  if (page >= 99){ pad -= 1; }
+  if (page[0] >= 99){ pad -= 1; }
   gotoxy(0, 0);
   puts("--------------------");
   gotoxy(pad, 0);
-  printf(" %d/%d\n", page + 1, maxPage);
+  printf(" %d/%d\n", page[0] + 1, maxPage);
  
   for (i=0; i!=16; i++){
     // normally this would come from cart
@@ -84,8 +85,8 @@ void soundMove(){
 // draw the menu, wait for a choice
 void menu () {
   unsigned int input;
-  position = 0;
-  page = 0;
+  position[0] = 0;
+  page[0] = 0;
 
   showPage();
   gotoxy(0, 1);
@@ -95,24 +96,24 @@ void menu () {
     input =  joypad();
 
     if (input & J_LEFT || input & J_RIGHT || input & J_UP || input & J_DOWN){
-      gotoxy(0, position+1);
+      gotoxy(0, position[0]+1);
       putchar(CHAR_SPACE);
     }
 
     // up/down control position
-    if (input & J_UP && position != 0) { position -= 1; }
-    if (input & J_DOWN && position != maxPos) { position += 1; }
+    if (input & J_UP && position[0] != 0) { position[0] -= 1; }
+    if (input & J_DOWN && position[0] != maxPos) { position[0] += 1; }
 
     // left/right controls page
-    if ((input & J_LEFT) && page != 0) { page -= 1; }
-    if ((input & J_RIGHT) && page != maxPage) { page += 1; }
+    if ((input & J_LEFT) && page[0] != 0) { page[0] -= 1; }
+    if ((input & J_RIGHT) && page[0] != maxPage) { page[0] += 1; }
 
     if (input & J_LEFT || input & J_RIGHT){
       showPage();
     }
 
     if (input & J_LEFT || input & J_RIGHT || input & J_UP || input & J_DOWN){
-      gotoxy(0, position + 1);
+      gotoxy(0, position[0] + 1);
       putchar(CHAR_ARROW_RIGHT);
       soundMove();
       waitpadup();
@@ -129,8 +130,10 @@ void menu () {
 }
 
 int main () {
-  splash();
-  soundChoose();
+  ENABLE_RAM_MBC1;
+  
+  // splash();
+  // soundChoose();
   menu();
   gotoxy(0, 0);
   printf("You chose:\n%d", position);
