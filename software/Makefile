@@ -23,10 +23,6 @@ all:	$(BINS)
 %.gb:	%.o
 	$(CC) -o $@ $<
 
-# npm install -g github-release-cli
-release: dkart.gb
-	github-release upload --owner konsumer --repo dkart --tag ${latest_tag} --name ${latest_tag} --body "ROM Publish" dkart.gb
-
 clean:
 	rm -f *.o *.lst *.map *.gb *.gbc *~ *.rel *.cdb *.ihx *.lnk *.sym *.asm
 
