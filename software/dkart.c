@@ -80,6 +80,7 @@ void setupMock(){
   }
 }
 
+// show the current page of roms
 void drawMenu() {
   sprintf(status, "%d/%d", currentPage + 1, totalPages + 1);
   center(17, status);
@@ -89,6 +90,7 @@ void drawMenu() {
   }
 }
 
+// show the current rom-selection with arrow
 void drawSelection() {
   for (p=0; p!=pageLen; p++){
     pr(0, p, p == currentRom ? arrowString : " ");
