@@ -13,15 +13,17 @@ char arrowString[] = {26, 0};
 unsigned int* PTR_CURRENT_PAGE = (int*) 0xA000;
 unsigned int* PTR_CURRENT_ROM = (int*) 0xA001;
 unsigned long* PTR_ROM_COUNT = (long*) 0xA002;
-char* PTR_ROMS = (char*) 0xA100;
+char* PTR_ROMS = (char*) 0xA010;
 
 unsigned long totalPages;
+unsigned long totalRoms;
 unsigned int p;
 char buff[LEN_ROM + 1];
 unsigned int input;
 char status[20];
 unsigned int currentPage;
 unsigned int currentRom;
+unsigned long lastRom;
 
 // clear the screen
 void cls (void) NONBANKED;
@@ -74,7 +76,7 @@ void soundMove(){
 
 // generate VRAM, as it will look from cart
 void setupMock(){
-  PTR_ROM_COUNT[0] = 1000;
+  PTR_ROM_COUNT[0] = 100;
   for (p=0; p!=LEN_PAGE; p++){
     sprintf(PTR_ROMS + (p * (LEN_ROM + 1)), "Test ROM %d", p + 1 + (currentPage * LEN_PAGE));
   }
@@ -84,9 +86,17 @@ void setupMock(){
 void drawMenu() {
   sprintf(status, "%d/%d", currentPage + 1, totalPages + 1);
   center(17, status);
+  currentRom = 0;
+  if (currentPage == totalPages){
+    lastRom = ((unsigned int) totalRoms % LEN_PAGE);
+  } else {
+    lastRom = LEN_PAGE;
+  }
   for (p=0; p!=LEN_PAGE; p++){
     pr(1, p, "                   ");
-    pr(1, p, PTR_ROMS + (p * (LEN_ROM + 1)));
+    if (p < lastRom){
+      pr(1, p, PTR_ROMS + (p * (LEN_ROM + 1)));
+    }
   }
 }
 
@@ -106,17 +116,17 @@ void main () {
   splash();
   waitpad(J_START | J_SELECT | J_B | J_A);
   soundChoose();
+  
   ENABLE_RAM_MBC1;
   currentPage = 0;
   currentRom = 0;
-  
-  // setupMock();
-  
-  totalPages = PTR_ROM_COUNT[0] / LEN_PAGE;
+  totalRoms = PTR_ROM_COUNT[0];
+  totalPages = totalRoms / LEN_PAGE;
 
   cls();
   set_bkg_data( 0, 132, font_tiles );
 
+  setupMock();
   drawMenu();
   drawSelection();
 
@@ -125,7 +135,7 @@ void main () {
     if (input & J_UP && currentRom != 0) {
       currentRom -= 1;
     }
-    if (input & J_DOWN && currentRom != (LEN_PAGE-1)) {
+    if (input & J_DOWN && currentRom != (lastRom-1)) {
       currentRom += 1;
     }
     if ((input & J_LEFT) && currentPage != 0) {
@@ -135,11 +145,10 @@ void main () {
       currentPage += 1;
     }
     if (input & J_LEFT || input & J_RIGHT){
+      setupMock();
       drawMenu();
     }
     if (input & J_LEFT || input & J_RIGHT || input & J_UP || input & J_DOWN){
-      // setupMock();
-
       drawSelection();
       soundMove();
       waitpadup();
