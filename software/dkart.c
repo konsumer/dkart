@@ -126,7 +126,7 @@ void main () {
   cls();
   set_bkg_data( 0, 132, font_tiles );
 
-  setupMock();
+  // setupMock();
   drawMenu();
   drawSelection();
 
@@ -145,7 +145,7 @@ void main () {
       currentPage += 1;
     }
     if (input & J_LEFT || input & J_RIGHT){
-      setupMock();
+      // setupMock();
       drawMenu();
     }
     if (input & J_LEFT || input & J_RIGHT || input & J_UP || input & J_DOWN){
