@@ -56,12 +56,12 @@ in the software directory.
 
 ### dependencies
 
-Make sure you have [GBDK](https://github.com/gheja/gbdk), and edit Makefile to have the correct path to [GBDK](http://gbdk.sourceforge.net/) & [RGBDS](https://github.com/rednex/rgbds).
+Make sure you have [GBDK](https://github.com/gheja/gbdk), and edit Makefile to have the correct path to [GBDK](http://gbdk.sourceforge.net/).
 
 #### Arch Linux
 
 ```sh
-yaourt -S rgbds gbdk
+yaourt -S gbdk
 ```
 
 #### Ubuntu Linux

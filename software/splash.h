@@ -1,6 +1,5 @@
 /*
  Advanced PCX to GameBoy converter v2.15
-
  Tiles data
  Original PCX File : "splash.pcx"
 */

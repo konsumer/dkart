@@ -1,11 +1,5 @@
-latest_tag=$$(git describe --abbrev=0 --tags)
-
-LOC_GBDK = /opt/gbdk
-
-# RGBFIX = /opt/rgbds/rgbfix
-RGBFIX = /usr/local/bin/rgbfix
-
-CC	= ${LOC_GBDK}/bin/lcc -Wa-l -Wl-m -Wl-yt3 -Wl-yo4 -Wl-ya4
+CC	= /opt/gbdk/bin/lcc -Wa-l -Wl-m -Wl-yt3 -Wl-yo4 -Wl-ya4
+RGBGFX = /usr/local/bin/rgbgfx
 
 BINS	= dkart.gb
 
