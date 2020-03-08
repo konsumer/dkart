@@ -10,16 +10,18 @@
 
 char arrowString[] = {26, 0};
 
-unsigned int* currentPage = (int*) 0xA000;
-unsigned int* currentRom = (int*) 0xA001;
-unsigned long* romCount = (long*) 0xA002;
-char* roms = (char*) 0xA100;
-unsigned long totalPages;
+unsigned int* PTR_CURRENT_PAGE = (int*) 0xA000;
+unsigned int* PTR_CURRENT_ROM = (int*) 0xA001;
+unsigned long* PTR_ROM_COUNT = (long*) 0xA002;
+char* PTR_ROMS = (char*) 0xA100;
 
+unsigned long totalPages;
 unsigned int p;
 char buff[romLen + 1];
 unsigned int input;
 char status[20];
+unsigned int currentPage;
+unsigned int currentRom;
 
 // clear the screen
 void cls (void) NONBANKED;
@@ -72,24 +74,24 @@ void soundMove(){
 
 // generate VRAM, as it will look from cart
 void setupMock(){
-  romCount[0] = 1000;
+  PTR_ROM_COUNT[0] = 1000;
   for (p=0; p!=pageLen; p++){
-    sprintf(roms + (p * (romLen + 1)), "Test ROM %d", p + 1);
+    sprintf(PTR_ROMS + (p * (romLen + 1)), "Test ROM %d", p + 1 + (currentPage * pageLen));
   }
 }
 
 void drawMenu() {
-  sprintf(status, "- %d/%d -", currentPage[0] + 1, totalPages + 1);
+  sprintf(status, "%d/%d", currentPage + 1, totalPages + 1);
   center(17, status);
   for (p=0; p!=pageLen; p++){
     pr(1, p, "                   ");
-    pr(1, p, roms + (p * (romLen + 1)));
+    pr(1, p, PTR_ROMS + (p * (romLen + 1)));
   }
 }
 
 void drawSelection() {
   for (p=0; p!=pageLen; p++){
-    pr(0, p, p == currentRom[0] ? arrowString : " ");
+    pr(0, p, p == currentRom ? arrowString : " ");
   }
 }
 
@@ -99,10 +101,13 @@ void main () {
   waitpad(J_START | J_SELECT | J_B | J_A);
   soundChoose();
   ENABLE_RAM_MBC1;
+  currentPage = 0;
+  currentRom = 0;
+  
+  // this will not be needed in cart
   setupMock();
-  currentPage[0] = 0;
-  currentRom[0] = 0;
-  totalPages = romCount[0] / pageLen;
+  
+  totalPages = PTR_ROM_COUNT[0] / pageLen;
 
   cls();
   set_bkg_data( 0, 132, font_tiles );
@@ -115,33 +120,45 @@ void main () {
 
   while(1){
     input =  joypad();
-    if (input & J_UP && currentRom[0] != 0) {
-      currentRom[0] -= 1;
+    if (input & J_UP && currentRom != 0) {
+      currentRom -= 1;
     }
-    if (input & J_DOWN && currentRom[0] != (pageLen-1)) {
-      currentRom[0] += 1;
+    if (input & J_DOWN && currentRom != (pageLen-1)) {
+      currentRom += 1;
     }
-    if ((input & J_LEFT) && currentPage[0] != 0) {
-      currentPage[0] = currentPage[0] - 1;
+    if ((input & J_LEFT) && currentPage != 0) {
+      currentPage -= 1;
     }
-    if ((input & J_RIGHT) && currentPage[0] < totalPages) {
-      currentPage[0] = currentPage[0] + 1;
+    if ((input & J_RIGHT) && currentPage < totalPages) {
+      currentPage += 1;
     }
     if (input & J_LEFT || input & J_RIGHT){
       drawMenu();
     }
     if (input & J_LEFT || input & J_RIGHT || input & J_UP || input & J_DOWN){
+      // this will not be needed in cart
+      setupMock();
+
       drawSelection();
       soundMove();
       waitpadup();
     }
     if (input & J_START || input & J_A){
+      waitpadup();
       break;
     }
   }
 
   cls();
   soundChoose();
-  sprintf(status, "You chose: %d", currentRom[0]);
-  center(8, status);
+  center(8, PTR_ROMS + (romLen * currentRom));
+
+  // Tell cart which ROM to load
+  PTR_CURRENT_PAGE[0] = currentPage;
+  PTR_CURRENT_ROM[0] = currentRom;
+
+  // TODO: might need a complete-check here
+
+  waitpad(J_START | J_SELECT | J_B | J_A);
+  reset();
 }
