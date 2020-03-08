@@ -85,7 +85,7 @@ void setupMock(){
 // show the current page of roms
 void drawMenu() {
   sprintf(status, "%d/%d", currentPage + 1, totalPages + 1);
-  center(17, status);
+  center(LEN_PAGE, status);
   currentRom = 0;
   if (currentPage == totalPages){
     lastRom = ((unsigned int) totalRoms % LEN_PAGE);
