@@ -108,10 +108,6 @@ void drawSelection() {
 }
 
 void main () {
-  SPRITES_8x8;
-  DISPLAY_ON;
-  SHOW_BKG;
-
   cls();
   splash();
   waitpad(J_START | J_SELECT | J_B | J_A);
@@ -123,6 +119,9 @@ void main () {
   totalRoms = PTR_ROM_COUNT[0];
   totalPages = totalRoms / LEN_PAGE;
 
+  SPRITES_8x8;
+  DISPLAY_ON;
+  SHOW_BKG;
   cls();
   set_bkg_data( 0, 132, font_tiles );
 
