@@ -104,8 +104,7 @@ void main () {
   currentPage = 0;
   currentRom = 0;
   
-  // this will not be needed in cart
-  setupMock();
+  // setupMock();
   
   totalPages = PTR_ROM_COUNT[0] / pageLen;
 
@@ -136,8 +135,7 @@ void main () {
       drawMenu();
     }
     if (input & J_LEFT || input & J_RIGHT || input & J_UP || input & J_DOWN){
-      // this will not be needed in cart
-      setupMock();
+      // setupMock();
 
       drawSelection();
       soundMove();
@@ -156,8 +154,6 @@ void main () {
   // Tell cart which ROM to load
   PTR_CURRENT_PAGE[0] = currentPage;
   PTR_CURRENT_ROM[0] = currentRom;
-
-  // TODO: might need a complete-check here
 
   waitpad(J_START | J_SELECT | J_B | J_A);
   reset();
