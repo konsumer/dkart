@@ -5,8 +5,8 @@
 #include "./splash.h"
 #include "./font.h"
 
-#define romLen 20
-#define pageLen 17
+#define LEN_ROM 20
+#define LEN_PAGE 17
 
 char arrowString[] = {26, 0};
 
@@ -17,7 +17,7 @@ char* PTR_ROMS = (char*) 0xA100;
 
 unsigned long totalPages;
 unsigned int p;
-char buff[romLen + 1];
+char buff[LEN_ROM + 1];
 unsigned int input;
 char status[20];
 unsigned int currentPage;
@@ -75,8 +75,8 @@ void soundMove(){
 // generate VRAM, as it will look from cart
 void setupMock(){
   PTR_ROM_COUNT[0] = 1000;
-  for (p=0; p!=pageLen; p++){
-    sprintf(PTR_ROMS + (p * (romLen + 1)), "Test ROM %d", p + 1 + (currentPage * pageLen));
+  for (p=0; p!=LEN_PAGE; p++){
+    sprintf(PTR_ROMS + (p * (LEN_ROM + 1)), "Test ROM %d", p + 1 + (currentPage * LEN_PAGE));
   }
 }
 
@@ -84,15 +84,15 @@ void setupMock(){
 void drawMenu() {
   sprintf(status, "%d/%d", currentPage + 1, totalPages + 1);
   center(17, status);
-  for (p=0; p!=pageLen; p++){
+  for (p=0; p!=LEN_PAGE; p++){
     pr(1, p, "                   ");
-    pr(1, p, PTR_ROMS + (p * (romLen + 1)));
+    pr(1, p, PTR_ROMS + (p * (LEN_ROM + 1)));
   }
 }
 
 // show the current rom-selection with arrow
 void drawSelection() {
-  for (p=0; p!=pageLen; p++){
+  for (p=0; p!=LEN_PAGE; p++){
     pr(0, p, p == currentRom ? arrowString : " ");
   }
 }
@@ -112,7 +112,7 @@ void main () {
   
   // setupMock();
   
-  totalPages = PTR_ROM_COUNT[0] / pageLen;
+  totalPages = PTR_ROM_COUNT[0] / LEN_PAGE;
 
   cls();
   set_bkg_data( 0, 132, font_tiles );
@@ -125,7 +125,7 @@ void main () {
     if (input & J_UP && currentRom != 0) {
       currentRom -= 1;
     }
-    if (input & J_DOWN && currentRom != (pageLen-1)) {
+    if (input & J_DOWN && currentRom != (LEN_PAGE-1)) {
       currentRom += 1;
     }
     if ((input & J_LEFT) && currentPage != 0) {
@@ -152,7 +152,7 @@ void main () {
 
   cls();
   soundChoose();
-  center(8, PTR_ROMS + ((romLen+1) * currentRom));
+  center(8, PTR_ROMS + ((LEN_ROM+1) * currentRom));
 
   // Tell cart which ROM to load
   PTR_CURRENT_PAGE[0] = currentPage;
