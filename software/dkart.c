@@ -1,14 +1,14 @@
 #include <gb/gb.h>
 #include <stdio.h>
 #include <string.h>
-#include <gb/console.h>
 
 #include "./splash.h"
+#include "./font.h"
 
-#define CHAR_ARROW_RIGHT 3
-#define CHAR_SPACE ' '
 #define romLen 20
-#define pageLen 16
+#define pageLen 17
+
+char arrowString[] = {26, 0};
 
 unsigned int* currentPage = (int*) 0xA000;
 unsigned int* currentRom = (int*) 0xA001;
@@ -19,9 +19,32 @@ unsigned long totalPages;
 unsigned int p;
 char buff[romLen + 1];
 unsigned int input;
+char status[20];
 
 // clear the screen
-void cls(void) NONBANKED;
+void cls (void) NONBANKED;
+
+// show splash-screen
+void splash () {
+  set_bkg_data(0, splash_count, splash_tiles);
+  set_bkg_tiles(0, 0, splash_width, splash_height, splash_map);
+  SHOW_BKG;
+}
+
+// print at a X,Y
+void pr (char x, char y, char *string) {
+   UBYTE strLen;
+   strLen = strlen(string);
+   set_bkg_tiles(x,y,strLen,1,(unsigned char *)string);
+}
+
+// center text on line Y
+void center (char y, char *string){
+  UBYTE offset;
+  offset = 10 - (strlen(string) / 2);
+  pr(0, y, "                    ");
+  pr(offset, y, string);
+}
 
 // make a "pew" sound
 void soundChoose(){
@@ -47,13 +70,6 @@ void soundMove(){
   NR14_REG = 0x80;
 }
 
-// show splash-screen
-void splash () {
-  set_bkg_data(0, splash_count, splash_tiles);
-  set_bkg_tiles(0, 0, splash_width, splash_height, splash_map);
-  SHOW_BKG;
-}
-
 // generate VRAM, as it will look from cart
 void setupMock(){
   romCount[0] = 1000;
@@ -62,28 +78,22 @@ void setupMock(){
   }
 }
 
-// draw the current menu
-void drawMenu(){
-  cls();
+void drawMenu() {
+  sprintf(status, "- %d/%d -", currentPage[0] + 1, totalPages + 1);
+  center(17, status);
   for (p=0; p!=pageLen; p++){
-    memcpy(buff, roms + (p * (romLen + 1)), romLen + 1);
-    gotoxy(0, p);
-    puts("                    ");
-    gotoxy(0, p);
-    printf(" %s", buff);
-  }
-  gotoxy(0, 16);
-  printf("        %d/%d", currentPage[0] + 1, totalPages + 1);
-}
-
-void drawSelection(){
-  for (p=0; p!=pageLen; p++){
-    gotoxy(0, p);
-    putchar(p == currentRom[0] ? CHAR_ARROW_RIGHT : CHAR_SPACE);
+    pr(1, p, "                   ");
+    pr(1, p, roms + (p * (romLen + 1)));
   }
 }
 
-int main(){
+void drawSelection() {
+  for (p=0; p!=pageLen; p++){
+    pr(0, p, p == currentRom[0] ? arrowString : " ");
+  }
+}
+
+void main () {
   cls();
   splash();
   waitpad(J_START | J_SELECT | J_B | J_A);
@@ -93,9 +103,16 @@ int main(){
   currentPage[0] = 0;
   currentRom[0] = 0;
   totalPages = romCount[0] / pageLen;
+
+  cls();
+  set_bkg_data( 0, 132, font_tiles );
+  SPRITES_8x8;
+  DISPLAY_ON;
+  SHOW_BKG;
+
   drawMenu();
   drawSelection();
-  
+
   while(1){
     input =  joypad();
     if (input & J_UP && currentRom[0] != 0) {
@@ -118,6 +135,13 @@ int main(){
       soundMove();
       waitpadup();
     }
+    if (input & J_START || input & J_A){
+      break;
+    }
   }
-  return 0;
+
+  cls();
+  soundChoose();
+  sprintf(status, "You chose: %d", currentRom[0]);
+  center(8, status);
 }
