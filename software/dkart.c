@@ -96,6 +96,10 @@ void drawSelection() {
 }
 
 void main () {
+  SPRITES_8x8;
+  DISPLAY_ON;
+  SHOW_BKG;
+
   cls();
   splash();
   waitpad(J_START | J_SELECT | J_B | J_A);
@@ -110,9 +114,6 @@ void main () {
 
   cls();
   set_bkg_data( 0, 132, font_tiles );
-  SPRITES_8x8;
-  DISPLAY_ON;
-  SHOW_BKG;
 
   drawMenu();
   drawSelection();
@@ -149,7 +150,7 @@ void main () {
 
   cls();
   soundChoose();
-  center(8, PTR_ROMS + (romLen * currentRom));
+  center(8, PTR_ROMS + ((romLen+1) * currentRom));
 
   // Tell cart which ROM to load
   PTR_CURRENT_PAGE[0] = currentPage;
