@@ -16,6 +16,7 @@ char *DKART_ROMS = (char *) 0xA006;
 void cls(void) NONBANKED;
 
 // simple wrapper around dkart commands
+// for commands that need response or "done", wiat for DKART_CMD=0 (cart will set it to zero when it finishes)
 void dkart(unsigned int cmd){
   if (cmd ==  DKART_INIT){
     ENABLE_RAM_MBC1;
