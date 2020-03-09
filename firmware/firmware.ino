@@ -78,7 +78,7 @@ void getROMs() {
       romCount++;
       if (romCount >= pageStart && romCount <= pageEnd) {
         // TODO: format for GB (len <= 20)
-        romPage[ romCount % 15 ] = file.name();
+        romPage[ romCount - pageStart ] = file.name();
       }
     }
     file.close();
