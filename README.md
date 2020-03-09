@@ -11,7 +11,7 @@ If you just want to get started, go to [releases](https://github.com/konsumer/dk
 
 ## Hardware
 
-It's meant to be very cheap & easy to put together. I made a PCB, and you can just solder in a [STM32F401](https://www.banggood.com/STM32F401-Development-Board-STM32F401CCU6-STM32F4-Learning-Board-p-1568897.html) and the [SDCard shield](https://www.banggood.com/SD-Card-Module-Slot-Socket-Reader-Mp3-player-p-74105.html), and it should work.
+It's meant to be very cheap & easy to put together. I made a PCB, and you can just solder in a [cheap ESP32 board](https://www.banggood.com/Geekcreit-ESP32-WiFibluetooth-Development-Board-Ultra-Low-Power-Consumption-Dual-Cores-Unsoldered-p-1214159.html) and the [SDCard shield](https://www.banggood.com/SD-Card-Module-Slot-Socket-Reader-Mp3-player-p-74105.html), and it should work.
 
 Originally, I designed this as a custom circuit with really low-resource chips, but realized it was much easier and cheaper to just use more modern ready-made stuff.
 
@@ -23,7 +23,8 @@ I am still working on the PCB & schematic. You can open hardware/Dkart.json at [
 
 Here are some other ideas I am looking at:
 
-* [cheap ESP32 board](https://www.banggood.com/Geekcreit-ESP32-WiFibluetooth-Development-Board-Ultra-Low-Power-Consumption-Dual-Cores-Unsoldered-p-1214159.html) - works with arduino, has wifi & bluetooth. not enough RAM/ROM, but could be combined with flash mem. [This board](https://www.banggood.com/LILYGO-TTGO-T2-ESP32-0_95-OLED-SD-Card-WiFi-bluetooth-Module-Development-Board-p-1270477.html?rmmds=search&cur_warehouse=CN) has a SDCard and OLED screen (and wifi/bluetooth)
+* [STM32F401](https://www.banggood.com/STM32F401-Development-Board-STM32F401CCU6-STM32F4-Learning-Board-p-1568897.html)
+* [This board](https://www.banggood.com/LILYGO-TTGO-T2-ESP32-0_95-OLED-SD-Card-WiFi-bluetooth-Module-Development-Board-p-1270477.html) has a SDCard and OLED screen (and wifi/bluetooth)
 * [cheap atmega2560 board](https://robotdyn.com/mega-2560-pro-mini-atmega2560-16au.html), works with arduino & has more IO/RAM/CPU, but still not big enough to hold every ROM
 * [fast flash mem](https://www.sparkfun.com/products/15809) - I could load the rom & ram into flash temporarily on a lower-end microcontroller, then feed the data to the GB.
 * [something like this](https://www.banggood.com/GY-Openlog-Cleanflight-Naze32-F3-Blackbox-Flash-Recorder-Module-p-1309673.html) has a lot of storage (32GB) but might not be fast enough
@@ -33,6 +34,7 @@ Here are some other ideas I am looking at:
 * [better SDCards](https://www.cameramemoryspeed.com/sd-memory-card-faq/fastest-memory-card/) can go much faster, so make sure to check SD speed (SDFst has a `bench` sketch)
 * 3d print longer cart to hold more electronics if needed. [here](https://www.thingiverse.com/thing:2882206) are some nice variations. [Here](https://www.thingiverse.com/thing:3101147) is a nice modular design (opnscad - chnage logo, etc)
 * I have a [ATxmega128A1 breakout](https://www.sparkfun.com/products/retired/9546) laying around, but it's discontinued at sparkfun. It has 78 IO and 32 MIPS! It only has 128kB of flash memory & 8 kB SRAM, but could be used easily with other things, possibly SD alone is fast enough.
+* look at [this ESP32 cart](https://hackaday.io/project/20769-wifi-game-boy-cartridge). They have a lot of the same ideas.
 
 
 ## Firmware

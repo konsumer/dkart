@@ -57,6 +57,8 @@ ArduinoOutStream cout(Serial);
 // Store error strings in flash to save RAM.
 #define error(s) sd.errorHalt(&Serial, F(s))
 
+// TODO: put dkart ROM data in PROGMEN? https://forum.arduino.cc/index.php?topic=530095.0
+
 unsigned long romCount = 0;
 char* romPage[15];
 unsigned int currentPage = 0;
@@ -64,6 +66,7 @@ unsigned long pageStart;
 unsigned long pageEnd;
 
 // this gets totalCount & current page
+// TODO: write this to SRAM file (dkart.sav) so I can use generic routines
 void getROMs() {
   if (!root.open("/")) {
     error("open root");
@@ -74,11 +77,12 @@ void getROMs() {
   pageEnd = pageStart + 15;
 
   while (file.openNext(&root, O_RDONLY)) {
+    // TODO: handle sub-dirs
+    // TODO: check extension
     if (!file.isHidden() && !file.isSubDir()) {
       romCount++;
       if (romCount >= pageStart && romCount <= pageEnd) {
-        // TODO: format for GB (len <= 20)
-        romPage[ romCount - pageStart ] = file.name();
+        memcpy(romPage[ romCount - pageStart ], file.name(), 20);
       }
     }
     file.close();
@@ -86,7 +90,10 @@ void getROMs() {
 }
 
 
-void setup() {    
+void setup() {
+  // TODO: initialize interrupt for clock to R/W on address
+  // TODO: use EEPROM to store current ROM
+  
   Serial.begin(9600);
   while (!Serial) {
     SysCall::yield();
@@ -100,7 +107,6 @@ void setup() {
   if (!sd.begin(SD_CONFIG)) {
     sd.initErrorHalt(&Serial);
   }
-  
   getROMs();
   cout << "ROMS: " << romCount << "\n";
 }
