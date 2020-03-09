@@ -62,7 +62,7 @@ Make sure you have [GBDK](https://github.com/gheja/gbdk), and edit Makefile to h
 #### Arch Linux
 
 ```sh
-yaourt -S gbdk
+yay -S gbdk rgbds
 ```
 
 #### Ubuntu Linux
