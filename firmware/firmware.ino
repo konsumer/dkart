@@ -91,8 +91,9 @@ void getROMs() {
 
 
 void setup() {
-  // TODO: initialize interrupt for clock to R/W on address
+  // TODO: initialize interrupt for clock to R/W from SD
   // TODO: use EEPROM to store current ROM
+  // TODO: send custom startup logo on second read (maybe instead of spalsh screen)
   
   Serial.begin(9600);
   while (!Serial) {
