@@ -84,6 +84,8 @@ void setupMock(){
 
 // show the current page of roms
 void drawMenu() {
+  PTR_CURRENT_PAGE[0] = currentPage;
+  // TODO: wait for cart?
   sprintf(status, "%d/%d", currentPage + 1, totalPages + 1);
   center(LEN_PAGE, status);
   currentRom = 0;
@@ -162,8 +164,7 @@ void main () {
   soundChoose();
   center(8, PTR_ROMS + ((LEN_ROM+1) * currentRom));
 
-  // Tell cart which ROM to load
-  PTR_CURRENT_PAGE[0] = currentPage;
+  // Tell cart which ROM to load from currentPage
   PTR_CURRENT_ROM[0] = currentRom;
 
   waitpad(J_START | J_SELECT | J_B | J_A);
