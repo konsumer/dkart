@@ -70,10 +70,10 @@ void setup() {
   sav.seek(0);
   // turn romCount into 4-bytes at beginning of file
   byte rc[4] = {
-    (romCount >> 24) & 0xFF,
-    (romCount >> 16) & 0xFF,
+    romCount & 0xFF,
     (romCount >> 8) & 0xFF,
-    romCount & 0xFF
+    (romCount >> 16) & 0xFF,
+    (romCount >> 24) & 0xFF    
   };
   sav.write(rc, 4);
   
