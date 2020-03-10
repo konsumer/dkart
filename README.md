@@ -39,10 +39,9 @@ Here are some other ideas I am looking at:
 
 ## Firmware
 
-The firmware runs on the device to emulate ROM/RAM reading/writing data to a microSD card formatted FAT32.
+The firmware runs on the device to emulate ROM/RAM reading/writing data to a microSD card formatted FAT16/FAT32/ExFat. The firmware is meant to be compiled in Arduino IDE. If you open serial-monitor when it's running, you'll see some debugging output. On Arch Linux, I had to use `arduino-PR-beta1.9-BUILD-117` for serial-monitor to work, due to some java error.
 
-You can also compile it with the included `Makefile`
-
+Files should all be in the root of the SDCard. The fRAM-size is 128K so you may hit limits if you have a ton of ROM files on the SD (limit should be around 8,737.) The file-list uses ROM-header-title, so if you have a bunch of the same ROM file-named differently, it will work, but in the ROM-list they will all have the same name. You can use this trick to have different copies of the same ROM with separate RAM files (like 1-per-song for nanoloop, for example.)
 
 ## Software
 
@@ -56,48 +55,7 @@ make
 
 in the software directory. 
 
-
-### dependencies
-
-Make sure you have [GBDK](https://github.com/gheja/gbdk), and edit Makefile to have the correct path to [GBDK](http://gbdk.sourceforge.net/).
-
-#### Arch Linux
-
-```sh
-yay -S gbdk rgbds
-```
-
-#### Ubuntu Linux
-First you'll need these:
-
-```sh
-sudo apt-get -y install make gcc g++ bison flex
-```
-
-Now, run "Make" steps, below.
-
-#### Other OS
-
-I'm sure you can install them on MacOS, Windows, etc, but I didn't have time to test. If you figure it out, send a PR!
-
-
-#### Make
-
-```sh
-wget https://github.com/gheja/gbdk/archive/master.zip -O gbdk.zip
-unzip gbdk.zip
-cd gbdk-master
-make
-sudo make install
-
-cd ..
-
-wget https://github.com/rednex/rgbds/archive/master.zip -O rgbds.zip
-unzip rgbds.zip
-cd rgbds-master
-make
-sudo make install
-```
+You can read more about it in [software](./software/README.md).
 
 ## TODO
 

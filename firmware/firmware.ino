@@ -66,7 +66,7 @@ void setup() {
      }
      file.close();
   }
-  // TODO: zerofill to 128K, & make sure to update makefile to reflect correct size
+  
   sav.seek(0);
   // turn romCount into 4-bytes at beginning of file
   byte rc[4] = {
@@ -76,6 +76,15 @@ void setup() {
     romCount & 0xFF
   };
   sav.write(rc, 4);
+  
+  // 0-fill to 128K (the RAM size in cart-header)
+  // TODO: should probly make a buffer or do this in chunks
+  unsigned long zeroCount = 131072 - (romCount * 15) - 4;
+  while(zeroCount){
+    sav.write("\0", 1);
+    zeroCount--;
+  }
+
   sav.close();
   
   Serial.write("ROMS Found: ");

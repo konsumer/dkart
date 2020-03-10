@@ -28,4 +28,8 @@
 *.pro
 *.epf
 
+# OS files
 .DS_Store
+
+# Generated data
+splash_tiles.png

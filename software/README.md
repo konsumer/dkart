@@ -15,38 +15,60 @@ Here are some resources:
 * [hardware spec](http://www.emulatronia.com/doctec/consolas/gameboy/Gmb-spec.txt)
 * [cpu info](http://marc.rawer.de/Gameboy/Docs/GBCPUman.pdf)
 
-## ideas
+In order to use Makefile, you will need docker (if you want to compile your own splash.h), gbdk & rgbds.
 
-I need to pass data & commands back-and-forth to cart. I think using a system like this will work:
+When you have all this installed, check the file for correct paths and run `make`.
 
-```c
-#define DKART_TRIGGER (UBYTE *)0xDEADU
-#define DKART_PARAM1 (UBYTE *)0xDEAEU
+### splash
 
-#define COMMAND_ACTREGULAR 0  // reset cart to act normal
-#define COMMAND_GET_ROMS 1    // put list of ROMS for menu into GB's ROM-space
-#define COMMAND_SET_ROM 2     // tell cart to choose the ROM in param1
+I made the splash-image with [ggbgfx](https://www.gbdkjs.com/docs/ggbgfx/). If you just want to use mine, you don;t need to do any of this.
 
-void actRegular () {
-  *DKART_TRIGGER = COMMAND_ACTREGULAR;
-}
+```sh
+npm i -g ggbgfx-cli
+rm splash.h
+make
+```
 
-// tell cart your ROM-choice and reset GB
-void setSelection(unsigned int romID) {
-  *DKART_TRIGGER = COMMAND_SET_ROM;
-  *DKART_PARAM1 = romID;
-  actRegular();
-  reset();
-}
+### dependencies
 
-// get the SDCard file-list from ROM-memory
-char* getMenu() {
-  *DKART_TRIGGER = COMMAND_GET_ROMS;
+Make sure you have [GBDK](https://github.com/gheja/gbdk), and edit Makefile to have the correct path to [GBDK](http://gbdk.sourceforge.net/).
 
-  // TODO: get menu-items from ROM-memory
-  
-  actRegular();
+#### Arch Linux
 
-  // TODO: return menu-items
-}
+This is what I am using, primarily, so it's the best-tested.
+
+```sh
+yay -S gbdk rgbds
+```
+
+#### Ubuntu Linux
+First you'll need these:
+
+```sh
+sudo apt-get -y install make gcc g++ bison flex
+```
+
+Now, run "Make" steps, below.
+
+#### Other OS
+
+I'm sure you can install them on MacOS, Windows, etc, but I didn't have time to test. If you figure it out, send a PR!
+
+
+#### Make
+
+```sh
+wget https://github.com/gheja/gbdk/archive/master.zip -O gbdk.zip
+unzip gbdk.zip
+cd gbdk-master
+make
+sudo make install
+
+cd ..
+
+wget https://github.com/rednex/rgbds/archive/master.zip -O rgbds.zip
+unzip rgbds.zip
+cd rgbds-master
+make
+sudo make install
 ```
