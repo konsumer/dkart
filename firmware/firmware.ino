@@ -12,18 +12,20 @@ Currently this just builds a dkart.sav from the current file-list
 // this is maybe a bit specifc to my hardware, see SdFat examples to tune to yours, if needed
 #define SD_CONFIG SdSpiConfig(SS, DEDICATED_SPI, SD_SCK_MHZ(16))
 
-// This figures out correct filesystem (EX/FAT16/32)
-SdFs sd;
-FsFile file;
-FsFile root;
-FsFile sav;
-
 // TODO: put dkart ROM data in PROGMEN? https://forum.arduino.cc/index.php?topic=530095.0 or check for it on SD
 // TODO: detect if I need to upper-case filenames in checks/opens
 // TODO: blink on error
 // TODO: use GB-CLK interrupt to sleep/read
 
 #define error(s) sd.errorHalt(&Serial, F(s))
+
+// This figures out correct filesystem (EX/FAT16/32)
+SdFs sd;
+FsFile file;
+FsFile root;
+FsFile sav;
+
+char romName[15];
 
 unsigned long romCount = 0;
 char currentRom[255] = "dkart.gb";
@@ -53,12 +55,13 @@ void setup() {
   romCount = 0;
   sav.seek(4);
   while (file.openNext(&root, O_RDONLY)) {
-     char fname[21];
-     file.getName(fname, 21);
+     char fname[255];
+     file.getName(fname, 255);
      Serial.println(fname);
-     if (!file.isHidden() && !file.isSubDir() && strcmp(".gb", &fname[ strlen(fname) - 3 ]) == 0) {
-      // TODO: get name from header instead of filename
-      sav.write(fname, 20);
+     if (!file.isHidden() && !file.isSubDir() && strcmp(".gb", &fname[ strlen(fname) - 3 ]) == 0 && strcmp("dkart.gb", fname) != 0) {
+      file.seek(0x0134);
+      file.read(romName, 15);
+      sav.write(fname, 15);
       romCount++;
      }
      file.close();
