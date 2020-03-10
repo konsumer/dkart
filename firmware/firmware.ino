@@ -77,7 +77,7 @@ void setup() {
   sav.seek(0);
   sav.write(rc, 4);
   
-  // 0-fill to 32768 (the RAM size in cart-header)
+  // 0-fill to 32768 (the RAM size in dkart ROM-header)
   // TODO: should probly make a buffer or do this in chunks
   unsigned long zeroCount = 32768 - (romCount * 0x0F) - 4;
   sav.seek((romCount * 0x0F) + 4);
