@@ -67,7 +67,6 @@ void setup() {
      file.close();
   }
   
-  sav.seek(0);
   // turn romCount into 4-bytes at beginning of file
   byte rc[4] = {
     romCount & 0xFF,
@@ -75,6 +74,7 @@ void setup() {
     (romCount >> 16) & 0xFF,
     (romCount >> 24) & 0xFF    
   };
+  sav.seek(0);
   sav.write(rc, 4);
   
   // 0-fill to 32768 (the RAM size in cart-header)
