@@ -80,8 +80,8 @@ void setup() {
   // 0-fill to 32768 (the RAM size in cart-header)
   // TODO: should probly make a buffer or do this in chunks
   unsigned long zeroCount = 32768 - (romCount * 0x0F) - 4;
+  sav.seek((romCount * 0x0F) + 4);
   while(zeroCount){
-    sav.seek(32768+zeroCount);
     sav.write("\0", 1);
     zeroCount--;
   }
