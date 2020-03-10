@@ -66,7 +66,7 @@ void setup() {
      }
      file.close();
   }
-  
+  // TODO: zerofill to 128K, & make sure to update makefile to reflect correct size
   sav.seek(0);
   // turn romCount into 4-bytes at beginning of file
   byte rc[4] = {

@@ -5,15 +5,16 @@
 #include "./splash.h"
 #include "./font.h"
 
-#define LEN_ROM 20
+#define LEN_ROM 15
 #define LEN_PAGE 17
 
 char arrowString[] = {26, 0};
 
-unsigned int* PTR_CURRENT_PAGE = (int*) 0xA000;
-unsigned int* PTR_CURRENT_ROM = (int*) 0xA001;
-unsigned long* PTR_ROM_COUNT = (long*) 0xA002;
-char* PTR_ROMS = (char*) 0xA010;
+// first 4 bytes of SRAM is total ROMs
+unsigned long* PTR_ROM_COUNT = (long*) 0xA000;
+
+// rest is list of ROMs
+char* PTR_ROMS = (char*) 0xA004;
 
 unsigned long totalPages;
 unsigned long totalRoms;
@@ -74,18 +75,8 @@ void soundMove(){
   NR14_REG = 0x80;
 }
 
-// generate VRAM, as it will look from cart
-void setupMock(){
-  PTR_ROM_COUNT[0] = 100;
-  for (p=0; p!=LEN_PAGE; p++){
-    sprintf(PTR_ROMS + (p * (LEN_ROM + 1)), "Test ROM %d", p + 1 + (currentPage * LEN_PAGE));
-  }
-}
-
 // show the current page of roms
 void drawMenu() {
-  PTR_CURRENT_PAGE[0] = currentPage;
-  // TODO: wait for cart?
   sprintf(status, "%d/%d", currentPage + 1, totalPages + 1);
   center(LEN_PAGE, status);
   currentRom = 0;
@@ -97,7 +88,7 @@ void drawMenu() {
   for (p=0; p!=LEN_PAGE; p++){
     pr(1, p, "                   ");
     if (p < lastRom){
-      pr(1, p, PTR_ROMS + (p * (LEN_ROM + 1)));
+      pr(1, p, PTR_ROMS + ((currentPage * LEN_PAGE + p) * (LEN_ROM + 1)));
     }
   }
 }
@@ -118,7 +109,6 @@ void main () {
   ENABLE_RAM_MBC1;
   currentPage = 0;
   currentRom = 0;
-  totalRoms = PTR_ROM_COUNT[0];
   totalPages = totalRoms / LEN_PAGE;
 
   SPRITES_8x8;
@@ -127,7 +117,6 @@ void main () {
   cls();
   set_bkg_data( 0, 132, font_tiles );
 
-  // setupMock();
   drawMenu();
   drawSelection();
 
@@ -146,7 +135,6 @@ void main () {
       currentPage += 1;
     }
     if (input & J_LEFT || input & J_RIGHT){
-      // setupMock();
       drawMenu();
     }
     if (input & J_LEFT || input & J_RIGHT || input & J_UP || input & J_DOWN){
@@ -165,8 +153,9 @@ void main () {
   center(8, PTR_ROMS + ((LEN_ROM+1) * currentRom));
 
   // Tell cart which ROM to load from currentPage
-  PTR_CURRENT_ROM[0] = currentRom;
+  PTR_ROM_COUNT[0] = currentRom + (currentPage * LEN_PAGE);
 
   waitpad(J_START | J_SELECT | J_B | J_A);
   reset();
 }
+

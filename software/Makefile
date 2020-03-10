@@ -1,4 +1,4 @@
-CC	= /opt/gbdk/bin/lcc -Wa-l -Wl-m -Wl-yt3 -Wl-yo4 -Wl-ya4
+CC	= /opt/gbdk/bin/lcc -Wa-l -Wl-m -Wl-yt6 -Wl-yo4 -Wl-ya4
 RGBGFX = /usr/local/bin/rgbgfx
 
 BINS	= dkart.gb
