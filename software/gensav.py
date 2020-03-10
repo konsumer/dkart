@@ -28,8 +28,7 @@ sav.seek(0, 0)
 sav.write(ctypes.c_uint32(romCount))
 
 # 0-fill to 32768
-toPad = 32768 - (romCount*0x0F) - 4
 sav.seek((romCount*0x0F) + 4, 0)
-sav.write(b'\x00' * toPad)
+sav.write(b'\x00' * (32768 - (romCount*0x0F) - 4))
 
 sav.close()

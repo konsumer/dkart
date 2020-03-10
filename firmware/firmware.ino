@@ -77,9 +77,9 @@ void setup() {
   };
   sav.write(rc, 4);
   
-  // 0-fill to 128K (the RAM size in cart-header)
+  // 0-fill to 32768 (the RAM size in cart-header)
   // TODO: should probly make a buffer or do this in chunks
-  unsigned long zeroCount = 131072 - (romCount * 15) - 4;
+  unsigned long zeroCount = 32768 - (romCount * 0x0F) - 4;
   while(zeroCount){
     sav.write("\0", 1);
     zeroCount--;
