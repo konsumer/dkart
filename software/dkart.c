@@ -16,6 +16,9 @@ unsigned long* PTR_ROM_COUNT = (long*) 0xA000;
 // rest is list of ROMs
 char* PTR_ROMS = (char*) 0xA004;
 
+// this is where commands are sent to dkart
+char* PTR_CMD = (char*) 0xBFF0;
+
 unsigned long totalPages;
 unsigned long totalRoms;
 unsigned int p;
@@ -26,25 +29,12 @@ unsigned int currentPage;
 unsigned int currentRom;
 unsigned long lastRom;
 
-// TODO: these might need to be adjusted since I moved to ggbgfx
-const unsigned int splash_count = sizeof(splash_map) * 8 * 8;
-const unsigned int splash_width = 20;
-const unsigned int splash_height = 18;
-
 // clear the screen
 void cls (void) NONBANKED;
 
-// show splash-screen
-void splash () {
-  set_bkg_data(0, splash_count, splash_tiles);
-  set_bkg_tiles(0, 0, splash_width, splash_height, splash_map);
-  SHOW_BKG;
-}
-
 // print at a X,Y
 void pr (char x, char y, char *string) {
-   UBYTE strLen;
-   strLen = strlen(string);
+   UBYTE strLen = strlen(string);
    set_bkg_tiles(x,y,strLen,1,(unsigned char *)string);
 }
 
@@ -54,6 +44,18 @@ void center (char y, char *string){
   offset = 10 - (strlen(string) / 2);
   pr(0, y, "                    ");
   pr(offset, y, string);
+}
+
+// TODO: these might need to be adjusted since I moved to ggbgfx
+const unsigned int splash_count = sizeof(splash_map) * 8 * 8;
+const unsigned int splash_width = 20;
+const unsigned int splash_height = 18;
+
+// show splash-screen
+void splash () {
+  set_bkg_data(0, splash_count, splash_tiles);
+  set_bkg_tiles(0, 0, splash_width, splash_height, splash_map);
+  SHOW_BKG;
 }
 
 // make a "pew" sound
@@ -93,7 +95,7 @@ void drawMenu() {
   for (p=0; p!=LEN_PAGE; p++){
     pr(1, p, "                   ");
     if (p < lastRom){
-      pr(1, p, PTR_ROMS + ((currentPage * LEN_PAGE + p) * (LEN_ROM + 1)));
+      pr(1, p, PTR_ROMS + ((currentPage * LEN_PAGE + p) * (LEN_ROM+1)));
     }
   }
 }
@@ -106,14 +108,15 @@ void drawSelection() {
 }
 
 void main () {
-  cls();
-  splash();
-  waitpad(J_START | J_SELECT | J_B | J_A);
-  soundChoose();
+  // cls();
+  // splash();
+  // waitpad(J_START | J_SELECT | J_B | J_A);
+  // soundChoose();
   
   ENABLE_RAM_MBC1;
   currentPage = 0;
   currentRom = 0;
+  totalRoms = PTR_ROM_COUNT[0];
   totalPages = totalRoms / LEN_PAGE;
 
   SPRITES_8x8;
@@ -155,10 +158,15 @@ void main () {
 
   cls();
   soundChoose();
-  center(8, PTR_ROMS + ((LEN_ROM+1) * currentRom));
+  unsigned long ramPosition = currentRom + (currentPage * ( LEN_ROM+1 ))
 
-  // Tell cart which ROM to load from currentPage
-  PTR_ROM_COUNT[0] = currentRom + (currentPage * LEN_PAGE);
+  center(7, "You chose:");
+  center(8, PTR_ROMS + ramPosition);
+
+  // Tell cart which ROM to load
+  PTR_CMD[0] = 'L';
+  PTR_CMD[1] = currentPage;
+  PTR_CMD[2] = currentRom;
 
   waitpad(J_START | J_SELECT | J_B | J_A);
   reset();

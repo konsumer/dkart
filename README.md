@@ -66,6 +66,7 @@ You can read more about it in [software](./software/README.md).
 * Replace Nintendo logo with mine
 * add extra IO-functionality, reading/writing to a specific memory location to turn on "I/O mode" and be able to interface with other peripherals
 * Add support for sub-directories
+* Create a modern cross-platform GBDK-focused full dev-env (use wine & docker to run stuff like GBTD.) Alternately, write some web-based tools around GBDK.js to allow sprite/map/sound editing.
 
 ## License
 
