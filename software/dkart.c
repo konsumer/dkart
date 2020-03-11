@@ -28,11 +28,13 @@ char status[20];
 unsigned int currentPage;
 unsigned int currentRom;
 unsigned long lastRom;
+unsigned long RAMoffset;
 
 // clear the screen
 void cls (void) NONBANKED;
 
 // print at a X,Y
+// TODO: look into full printf - https://stackoverflow.com/questions/1056411/how-to-pass-variable-number-of-arguments-to-printf-sprintf
 void pr (char x, char y, char *string) {
    UBYTE strLen = strlen(string);
    set_bkg_tiles(x,y,strLen,1,(unsigned char *)string);
@@ -158,15 +160,15 @@ void main () {
 
   cls();
   soundChoose();
-  // unsigned long ramPosition = currentRom + (currentPage * ( LEN_ROM+1 ))
 
-  // center(7, "You chose:");
-  // center(8, PTR_ROMS + ramPosition);
+  RAMoffset = (currentPage * LEN_PAGE) + currentRom;
+  
+  sprintf(status, "ROM #%d", RAMoffset);
+  center(LEN_PAGE/2, status);
 
-  // // Tell cart which ROM to load
-  // PTR_CMD[0] = 'L';
-  // PTR_CMD[1] = currentPage;
-  // PTR_CMD[2] = currentRom;
+  // send "load this ROM" message to dkart
+  PTR_CMD[0] = 'L';
+  PTR_CMD[1] = RAMoffset;
 
   waitpad(J_START | J_SELECT | J_B | J_A);
   reset();
