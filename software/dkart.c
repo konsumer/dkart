@@ -108,10 +108,10 @@ void drawSelection() {
 }
 
 void main () {
-  // cls();
-  // splash();
-  // waitpad(J_START | J_SELECT | J_B | J_A);
-  // soundChoose();
+  cls();
+  splash();
+  waitpad(J_START | J_SELECT | J_B | J_A);
+  soundChoose();
   
   ENABLE_RAM_MBC1;
   currentPage = 0;
@@ -158,15 +158,15 @@ void main () {
 
   cls();
   soundChoose();
-  unsigned long ramPosition = currentRom + (currentPage * ( LEN_ROM+1 ))
+  // unsigned long ramPosition = currentRom + (currentPage * ( LEN_ROM+1 ))
 
-  center(7, "You chose:");
-  center(8, PTR_ROMS + ramPosition);
+  // center(7, "You chose:");
+  // center(8, PTR_ROMS + ramPosition);
 
-  // Tell cart which ROM to load
-  PTR_CMD[0] = 'L';
-  PTR_CMD[1] = currentPage;
-  PTR_CMD[2] = currentRom;
+  // // Tell cart which ROM to load
+  // PTR_CMD[0] = 'L';
+  // PTR_CMD[1] = currentPage;
+  // PTR_CMD[2] = currentRom;
 
   waitpad(J_START | J_SELECT | J_B | J_A);
   reset();
