@@ -7,17 +7,14 @@ SDCard hooked to P5 (SS), P18 (SCK), P19 (MISO), P23 (MOSI)
 Currently this just builds a dkart.sav from the current file-list
 */
 
+// use https://github.com/greiman/SdFat-beta
 #include "SdFat.h"
 
 // this is maybe a bit specifc to my hardware, see SdFat examples to tune to yours, if needed
 #define SD_CONFIG SdSpiConfig(SS, DEDICATED_SPI, SD_SCK_MHZ(16))
 
-// TODO: put dkart ROM data in PROGMEN? https://forum.arduino.cc/index.php?topic=530095.0 or check for it on SD
-// TODO: detect if I need to upper-case filenames in checks/opens
-// TODO: blink on error
-// TODO: use GB-CLK interrupt to sleep/read
-
-#define error(s) sd.errorHalt(&Serial, F(s))
+#define error(s) { errState = true; sd.errorHalt(&Serial, F(s)); }
+#define interval 500
 
 // This figures out correct filesystem (EX/FAT16/32)
 SdFs sd;
@@ -31,22 +28,39 @@ unsigned long romCount = 0;
 char currentRom[255] = "dkart.gb";
 char currentSav[255] = "dkart.sav";
 
+bool errState = false;
+
+// async LED blinker to show error-state
+int ledState = LOW;
+unsigned long previousMillis = 0;
+unsigned long currentMillis = 0;
+void ledBlink () {
+  currentMillis = millis();
+  if (currentMillis - previousMillis >= interval) {
+    previousMillis = currentMillis;
+    ledState = ledState == LOW ? HIGH : LOW;
+    digitalWrite(LED_BUILTIN, ledState);
+  }
+}
+
 void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);
+
   Serial.begin(115200);
-  
-  Serial.println("Hi.");
 
   if (!sd.begin(SD_CONFIG)) {
+    errState = true;
     sd.initErrorHalt(&Serial);
   }
+
+  // TODO: use GB-CLK interrupt to sleep/read
+  // TODO: lookup currentRom from EEPROM/SDCard
+  // TODO: derive currentSav filename from currentRom
 
   // read file-list into dkart.sav
   if (!root.open("/")) {
     error("open root");
   }
-
-  // TODO: lookup currentRom from EEPROM/SDCard
-  // TODO: derive currentSav from currentRom
   
   if (!sav.open(currentSav, O_CREAT|O_WRITE)) {
     error("creating SAV");
@@ -78,7 +92,6 @@ void setup() {
   sav.write(rc, 4);
   
   // 0-fill to 32768 (the RAM size in dkart ROM-header)
-  // TODO: should probly make a buffer or do this in chunks
   unsigned long zeroCount = 32768 - (romCount * 0x0F) - 4;
   sav.seek((romCount * 0x0F) + 4);
   while(zeroCount){
@@ -93,4 +106,7 @@ void setup() {
 }
 
 void loop() {
+  if (errState) {
+    ledBlink();
+  }
 }

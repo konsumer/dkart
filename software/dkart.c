@@ -48,7 +48,6 @@ void center (char y, char *string){
   pr(offset, y, string);
 }
 
-// TODO: these might need to be adjusted since I moved to ggbgfx
 const unsigned int splash_count = sizeof(splash_map) * 8 * 8;
 const unsigned int splash_width = 20;
 const unsigned int splash_height = 18;
