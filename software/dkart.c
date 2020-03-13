@@ -33,6 +33,13 @@ unsigned long RAMoffset;
 // clear the screen
 void cls (void) NONBANKED;
 
+// This makes debug messages work in no$gmb & bgb
+// TODO: this isn't working
+char* PTR_DEBUG = (char*) 0x6464;
+void DEBUG(char* message) {
+  memcpy(PTR_DEBUG[0], message, sizeof(message));
+}
+
 // print at a X,Y
 // TODO: look into full printf - https://stackoverflow.com/questions/1056411/how-to-pass-variable-number-of-arguments-to-printf-sprintf
 void pr (char x, char y, char *string) {
@@ -59,23 +66,17 @@ void splash () {
   SHOW_BKG;
 }
 
-// make a "pew" sound
-void soundChoose(){
-  NR52_REG = 0x80;
-  NR51_REG = 0x11;
-  NR50_REG = 0x77;
-  NR10_REG = 0x15;
-  NR11_REG = 0x96;
-  NR12_REG = 0x73;
-  NR13_REG = 0xBB;
-  NR14_REG = 0x85;
+// make a "bwoop" sound
+void soundChoose () {
+    NR10_REG = 0x16; 
+    NR11_REG = 0x40;
+    NR12_REG = 0x73;  
+    NR13_REG = 0x00;   
+    NR14_REG = 0xC3;    
 }
 
 // make a move-sound
-void soundMove(){
-  NR52_REG = 0x80;
-  NR51_REG = 0x11;
-  NR50_REG = 0x77;
+void soundMove(){  
   NR10_REG = 0x79;
   NR11_REG = 0x8D;
   NR12_REG = 0x63;
@@ -108,23 +109,31 @@ void drawSelection() {
   }
 }
 
+void init () {
+  DISPLAY_ON;
+  ENABLE_RAM_MBC1;  
+  NR52_REG = 0x80;
+  NR51_REG = 0x11;
+  NR50_REG = 0x77;
+  // DEBUG("init complete");
+}
+
 void main () {
+  init();
   cls();
   splash();
   waitpad(J_START | J_SELECT | J_B | J_A);
   soundChoose();
   
-  ENABLE_RAM_MBC1;
   currentPage = 0;
   currentRom = 0;
   totalRoms = PTR_ROM_COUNT[0];
   totalPages = totalRoms / LEN_PAGE;
-
-  SPRITES_8x8;
-  DISPLAY_ON;
-  SHOW_BKG;
+  
   cls();
   set_bkg_data( 0, 132, font_tiles );
+  SPRITES_8x8;
+  SHOW_BKG;
 
   drawMenu();
   drawSelection();

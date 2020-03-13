@@ -1,10 +1,7 @@
 # -Wl-yt3 = "MBC1+RAM+BATTERY", -Wl-yo0="512K ROM", -Wl-ya4="128K RAM"
 CC	= /opt/gbdk/bin/lcc -Wa-l -Wl-m -Wl-yt3 -Wl-yo4 -Wl-ya4
-RGBGFX = /usr/local/bin/rgbgfx
 
-BINS	= splash.h dkart.gb
-
-all:	$(BINS)
+all: splash.h dkart.gb
 
 %.o:	%.c
 	$(CC) -c -o $@ $<
