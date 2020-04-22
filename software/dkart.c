@@ -55,14 +55,10 @@ void center (char y, char *string){
   pr(offset, y, string);
 }
 
-const unsigned int splash_count = sizeof(splash_map) * 8 * 8;
-const unsigned int splash_width = 20;
-const unsigned int splash_height = 18;
-
 // show splash-screen
 void splash () {
-  set_bkg_data(0, splash_count, splash_tiles);
-  set_bkg_tiles(0, 0, splash_width, splash_height, splash_map);
+  set_bkg_data(0, sizeof(splash_map) * 64, splash_tiles);
+  set_bkg_tiles(0, 0, 20, 18, splash_map);
   SHOW_BKG;
 }
 
