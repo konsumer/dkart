@@ -33,3 +33,6 @@
 
 # Generated data
 splash_tiles.png
+
+node_modules
+*.log

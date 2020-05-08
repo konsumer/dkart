@@ -1,0 +1,11 @@
+{
+  "name": "dkart",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "dependencies": {
+    "gbdk-emscripten": "^1.0.2",
+    "ggbgfx": "^1.0.0"
+  }
+}

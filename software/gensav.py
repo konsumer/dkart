@@ -6,6 +6,8 @@ Generate a fake SAV file for a list of ROMs
 This is good for emulators, so you can pretend you're running in DKART
 
 Usage: ./gensav.py <ROMDIR>
+
+TODO: port this to node
 """
 
 import glob

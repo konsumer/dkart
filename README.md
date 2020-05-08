@@ -47,10 +47,12 @@ Files should all be in the root of the SDCard. The fRAM-size is 128K so you may 
 
 A menu runs on the Gameboy to choose the current ROM/RAM. When a ROM is chosen, the gameboy reboots using that ROM/RAM.
 
-To compile, run
+To compile, you need nodejs installed
 
 ```sh
-make
+cd software
+npm i
+npm run build
 ```
 
 in the software directory. 
